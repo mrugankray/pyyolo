@@ -104,7 +104,7 @@ def train(epochs):
             output_tnsr = trn_sample['coord']
             grid_locate_x = trn_sample['grid_locate_x']
             grid_locate_y = trn_sample['grid_locate_y']
-            #print('output_tnsr_val',output_tnsr)          
+            print('output_tnsr_val shape',output_tnsr.shape)          
 
             if device == 'cuda':
                 trn_img = trn_img.type(torch.cuda.LongTensor)
@@ -117,6 +117,7 @@ def train(epochs):
             optimizer.zero_grad()
 
             pred_tnsr = model(trn_img)
+            print('pred tensor shape', pred_tnsr.shape)
 
             #comuting losses
             '''if iou_anchor1 > iou_anchor2:
