@@ -24,7 +24,7 @@ rootDirCoord = '/content/pyyolo/dataset/texts/mixed',transform=data_transform)
 transformed_test_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/test/img',
 rootDirCoord = '/content/pyyolo/dataset/test/txt',transform=data_transform)
 
-print(len(transformed_train_dataset))
+#print(len(transformed_train_dataset))
 
 len_dataset = len(transformed_train_dataset)
 indices = list(range(len_dataset))
@@ -69,7 +69,7 @@ model.classifier = classifier
 
 #print(model)
 
-#model = model.double()
+model = model.double()
 
 #criterion#
 criterion_coord = nn.SmoothL1Loss(size_average=None, reduce=None, reduction='mean')
@@ -104,7 +104,7 @@ def train(epochs):
             output_tnsr = trn_sample['coord']
             grid_locate_x = trn_sample['grid_locate_x']
             grid_locate_y = trn_sample['grid_locate_y']
-            print('output_tnsr_val',output_tnsr)          
+            #print('output_tnsr_val',output_tnsr)          
 
             if device == 'cuda':
                 trn_img = trn_img.type(torch.cuda.LongTensor)
@@ -178,7 +178,7 @@ def train(epochs):
                     output_tnsr_val = val_sample['coord']
                     grid_locate_x = val_sample['grid_locate_x']
                     grid_locate_y = val_sample['grid_locate_y']
-                    print('output_tnsr_val',output_tnsr_val)          
+                    #print('output_tnsr_val',output_tnsr_val)          
 
                     if device == 'cuda':
                         val_img = val_img.type(torch.cuda.LongTensor)
@@ -222,7 +222,7 @@ def train(epochs):
                     output_tnsr_test = test_sample['coord']
                     grid_locate_x = test_sample['grid_locate_x']
                     grid_locate_y = test_sample['grid_locate_y']
-                    print('output_tnsr_test',output_tnsr_test)          
+                    #print('output_tnsr_test',output_tnsr_test)          
 
                     if device == 'cuda':
                         test_img = test_img.type(torch.cuda.LongTensor)
