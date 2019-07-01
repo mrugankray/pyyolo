@@ -104,7 +104,8 @@ def train(epochs):
             output_tnsr = trn_sample['coord']
             grid_locate_x = trn_sample['grid_locate_x']
             grid_locate_y = trn_sample['grid_locate_y']
-            print('output_tnsr_val shape',output_tnsr.shape)          
+            print('output_tnsr_val shape',output_tnsr.shape)    
+            print('image shape', trn_img.shape)      
 
             if device == 'cuda':
                 trn_img = trn_img.type(torch.cuda.LongTensor)
