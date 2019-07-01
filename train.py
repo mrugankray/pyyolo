@@ -118,7 +118,7 @@ def train(epochs):
             optimizer.zero_grad()
 
             pred_tnsr = model(trn_img)
-            print('pred tensor shape', pred_tnsr.shape)
+            print('pred tensor shape', pred_tnsr[0][0])
 
             #comuting losses
             '''if iou_anchor1 > iou_anchor2:
