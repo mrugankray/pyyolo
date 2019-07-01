@@ -247,6 +247,8 @@ def train(epochs):
                     pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[i][grid_locate_y][grid_locate_x][6]], [output_tnsr[i][grid_locate_y][grid_locate_x][3],
                     output_tnsr[i][grid_locate_y][grid_locate_x][4],output_tnsr[i] [grid_locate_y][grid_locate_x][5] , output_tnsr[i][grid_locate_y][grid_locate_x][6]])
 
+                    continue
+
                 else:
                     loss_pc += criterion_coord(output_tns_testr[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
 
@@ -255,6 +257,8 @@ def train(epochs):
                     loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y][grid_locate_x][10],
                     pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i][grid_locate_y][grid_locate_x][12] , pred_tnsr[i][grid_locate_y][grid_locate_x][13]], [output_tnsr[i][grid_locate_y][grid_locate_x][10],
                     output_tnsr[i][grid_locate_y][grid_locate_x][11],output_tnsr[i] [grid_locate_y][grid_locate_x][12] , output_tnsr[i][grid_locate_y][grid_locate_x][13]])
+
+                    continue
 
 
             total_loss = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
@@ -304,6 +308,8 @@ def train(epochs):
                             pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[i][grid_locate_y][grid_locate_x][6]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][3],
                             output_tnsr_val[i][grid_locate_y][grid_locate_x][4],output_tnsr_val[i] [grid_locate_y][grid_locate_x][5] , output_tnsr_val[i][grid_locate_y][grid_locate_x][6]])
 
+                            continue
+
                         else:
                             loss_pc += criterion_coord(output_tnsr_val[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
 
@@ -313,6 +319,7 @@ def train(epochs):
                             pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[i][grid_locate_y][grid_locate_x][13]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][10],
                             output_tnsr_val[i][grid_locate_y][grid_locate_x][11],output_tnsr_val[i] [grid_locate_y][grid_locate_x][12] , output_tnsr_val[i][grid_locate_y][grid_locate_x][13]])
 
+                            continue
 
                     total_loss_val = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
 
@@ -348,6 +355,8 @@ def train(epochs):
                             pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[i][grid_locate_y][grid_locate_x][6]], [output_tnsr_test[i][grid_locate_y][grid_locate_x][3],
                             output_tnsr_test[i][grid_locate_y][grid_locate_x][4],output_tnsr_test[i][grid_locate_y][grid_locate_x][5] , output_tnsr_test[i][grid_locate_y][grid_locate_x][6]])
 
+                            continue
+
                         else:
                             loss_pc += criterion_coord(output_tnsr_test[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
 
@@ -357,6 +366,7 @@ def train(epochs):
                             pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[i][grid_locate_y][grid_locate_x][13]], [output_tnsr_test[i][grid_locate_y][grid_locate_x][10],
                             output_tnsr_test[i][grid_locate_y][grid_locate_x][11],output_tnsr_test[i] [grid_locate_y][grid_locate_x][12] , output_tnsr_test[i][grid_locate_y][grid_locate_x][13]])
 
+                            continue
 
                     total_loss_test = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
 
