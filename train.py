@@ -49,7 +49,106 @@ test_loader = DataLoader(transformed_test_dataset, batch_size = batch_size, shuf
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-model = models.vgg19(pretrained = False)
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.cv1 = nn.Conv2d(1, 64, 3, stride = 1, padding = 1)
+        self.cv2 = nn.Conv2d(64, 64, 3, stride = 1, padding = 1)
+        self.cv3 = nn.Conv2d(64, 128, 3, stride = 1, padding = 1)
+        self.cv4 = nn.Conv2d(128, 128, 3, stride = 1, padding = 1)
+        self.cv5 = nn.Conv2d(128, 256, 3, stride = 1, padding = 1)
+        self.cv6 = nn.Conv2d(256, 256, 3, stride = 1, padding = 1)
+        self.cv7 = nn.Conv2d(256, 256, 3, stride = 1, padding = 1)
+        self.cv8 = nn.Conv2d(256, 256, 3, stride = 1, padding = 1)
+        self.cv9 = nn.Conv2d(256, 512, 3, stride = 1, padding = 1)
+        self.cv10 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv11 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv12 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv13 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv14 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv15 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv16 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv17 = nn.Conv2d(512, 512, 3, stride = 1, padding = 1)
+        self.cv18 = nn.Conv2d(512, 256, 3, stride = 1, padding = 1)
+        self.cv19 = nn.Conv2d(256, 64, 3, stride = 1, padding = 1)
+        self.cv20 = nn.Conv2d(64, 14, 3, stride = 1, padding = 1)
+
+        self.dropout = nn.Dropout(0.25)
+
+        self.maxpool = nn.MaxPool2d(2,2)
+
+    def forward(self, x):
+        x = F.relu(self.cv1(x))
+        x = self.maxpool(F.relu(self.cv2(x)))
+        x = self.dropout(F.relu(self.cv3(x)))
+        x = self.maxpool(F.relu(self.cv4(x)))
+        x = F.relu(self.cv5(x))
+        x = F.relu(self.cv6(x))
+        x = self.dropout(F.relu(self.cv7(x)))
+        x = self.maxpool(F.relu(self.cv8(x)))
+        x = F.relu(self.cv9(x))
+        x = F.relu(self.cv10(x))
+        x = self.dropout(F.relu(self.cv11(x)))
+        x = self.maxpool(F.relu(self.cv12(x)))
+        x = F.relu(self.cv13(x))
+        x = F.relu(self.cv14(x))
+        x = F.relu(self.cv15(x))
+        x = F.relu(self.cv16(x))
+        x = F.relu(self.cv17(x))
+        x = F.relu(self.cv18(x))
+        x = self.dropout(F.relu(self.cv19(x)))
+        x = F.relu(self.cv20(x))
+
+        return x
+
+        '''
+        (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU(inplace)
+    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU(inplace)
+    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): ReLU(inplace)
+    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1,1))
+    (8): ReLU(inplace)
+    (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace)
+    (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): ReLU(inplace)
+    (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (15): ReLU(inplace)
+    (16): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (17): ReLU(inplace)
+    (18): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (19): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (20): ReLU(inplace)
+    (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (22): ReLU(inplace)
+    (23): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (24): ReLU(inplace)
+    (25): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (26): ReLU(inplace)
+    (27): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (29): ReLU(inplace)
+    (30): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (31): ReLU(inplace)
+    (32): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (33): ReLU(inplace)
+    (34): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (35): ReLU(inplace)
+    (36): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (classifier): Sequential(
+    (37): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (38): ReLU()
+    (39): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1,1))
+    (40): ReLU()
+    (41): Conv2d(64, 14, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        '''
+
+'''model = models.vgg19(pretrained = False)
 model.features[0] = nn.Conv2d(1, 64, 3, stride=(1,1), padding=(1,1))
 model.features[36] = nn.Conv2d(512, 512, 3, stride=(1,1), padding=(1,1))
 
@@ -61,14 +160,14 @@ classifier = nn.Sequential(OrderedDict([
     ('41', nn.Conv2d(64, 14, 3, stride=1, padding=1))
 ]))
 
-model.classifier = classifier
+model.classifier = classifier'''
 
 '''model.fc = nn.Sequential(OrderedDict([
     ('fc1', nn.Conv2d())
 ]))'''
 
 #print(model)
-
+model = Net()
 model = model.double()
 
 #criterion#
