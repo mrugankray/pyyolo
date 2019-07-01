@@ -11,11 +11,11 @@ from collections import OrderedDict
 data_transform = transforms.Compose([Rescale(240),RandomCrop(224),give_value(), Normalize(), ToTensor()])
 
 ##Loading Dataset##
-transformed_train_dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/mixed',
-rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/mixed',transform=data_transform)
+transformed_train_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/images/mixed',
+rootDirCoord = '/content/pyyolo/dataset/texts/mixed',transform=data_transform)
 
-transformed_test_dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/dogs_imgs',
-rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts',transform=data_transform)
+transformed_test_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/test/img',
+rootDirCoord = '/content/pyyolo/dataset/test/txt',transform=data_transform)
 
 print(len(transformed_train_dataset))
 
