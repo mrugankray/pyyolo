@@ -415,7 +415,7 @@ class ToTensor(object):
         
         image = image.transpose((2,0,1))
         #print('image shape after transpose', image.shape)
-
+        coord = coord.transpose((2,0,1))
         return {'image': image, 'coord': coord, 'img_name': sample['img_name'],'grid_locate_x':sample['grid_locate_x'],'grid_locate_y':sample['grid_locate_y']}
 
 ##testing##
