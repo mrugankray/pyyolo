@@ -10,6 +10,13 @@ from collections import OrderedDict
 
 data_transform = transforms.Compose([Rescale(240),RandomCrop(224),give_value(), Normalize(), ToTensor()])
 
+'''
+/content/pyyolo/dataset/images/mixed
+/content/pyyolo/dataset/texts/mixed
+/content/pyyolo/dataset/test/img
+/content/pyyolo/dataset/test/txt
+'''
+
 ##Loading Dataset##
 transformed_train_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/images/mixed',
 rootDirCoord = '/content/pyyolo/dataset/texts/mixed',transform=data_transform)
@@ -17,7 +24,7 @@ rootDirCoord = '/content/pyyolo/dataset/texts/mixed',transform=data_transform)
 transformed_test_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/test/img',
 rootDirCoord = '/content/pyyolo/dataset/test/txt',transform=data_transform)
 
-#print(len(transformed_train_dataset))
+print(len(transformed_train_dataset))
 
 len_dataset = len(transformed_train_dataset)
 indices = list(range(len_dataset))
@@ -62,7 +69,7 @@ model.classifier = classifier
 
 #print(model)
 
-model = model.double()
+#model = model.double()
 
 #criterion#
 criterion_coord = nn.SmoothL1Loss(size_average=None, reduce=None, reduction='mean')
@@ -94,16 +101,16 @@ def train(epochs):
 
         for trn_i, trn_sample in enumerate(train_loader):
             trn_img = trn_sample['image']
-            output_tnsr_val = trn_sample['coord']
+            output_tnsr = trn_sample['coord']
             grid_locate_x = trn_sample['grid_locate_x']
             grid_locate_y = trn_sample['grid_locate_y']
-            #print('output_tnsr_val',output_tnsr_val)          
+            print('output_tnsr_val',output_tnsr)          
 
             if device == 'cuda':
                 trn_img = trn_img.type(torch.cuda.LongTensor)
-                output_tnsr_val = output_tnsr_val.type(torch.cuda.LongTensor)
+                output_tnsr = output_tnsr.type(torch.cuda.LongTensor)
                 trn_img = trn_img.cuda()
-                output_tnsr_val = output_tnsr_val.cuda()
+                output_tnsr = output_tnsr.cuda()
                 pass
 
             #optizer to 0 grad
@@ -130,23 +137,23 @@ def train(epochs):
             loss_class = 0
             loss_bounding_coord = 0
             for i in range(0,7):
-                if output_tnsr_val[i][grid_locate_y][grid_locate_x][0] > -2:
-                    loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y][grid_locate_x][0], output_tnsr_val[i][grid_locate_y][grid_locate_x][0])
+                if output_tnsr[i][grid_locate_y][grid_locate_x][0] > -2:
+                    loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y][grid_locate_x][0], output_tnsr[i][grid_locate_y][grid_locate_x][0])
 
-                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][1], output_tnsr_val[i][grid_locate_y][grid_locate_x][1])
+                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][1], output_tnsr[i][grid_locate_y][grid_locate_x][1])
 
                     loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y][grid_locate_x][3],
-                    pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[grid_locate_y][grid_locate_x][6]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][3],
-                    output_tnsr_val[i][grid_locate_y][grid_locate_x][4],output_tnsr_val[i] [grid_locate_y][grid_locate_x][5] , output_tnsr_val[grid_locate_y][grid_locate_x][6]])
+                    pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[grid_locate_y][grid_locate_x][6]], [output_tnsr[i][grid_locate_y][grid_locate_x][3],
+                    output_tnsr[i][grid_locate_y][grid_locate_x][4],output_tnsr[i] [grid_locate_y][grid_locate_x][5] , output_tnsr[grid_locate_y][grid_locate_x][6]])
 
                 else:
                     loss_pc += criterion_coord(output_tns_testr[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
 
-                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][9], output_tnsr_val[i][grid_locate_y][grid_locate_x][9])
+                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][9], output_tnsr[i][grid_locate_y][grid_locate_x][9])
 
                     loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y][grid_locate_x][10],
-                    pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[grid_locate_y][grid_locate_x][13]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][10],
-                    output_tnsr_val[i][grid_locate_y][grid_locate_x][11],output_tnsr_val[i] [grid_locate_y][grid_locate_x][12] , output_tnsr_val[grid_locate_y][grid_locate_x][13]])
+                    pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[grid_locate_y][grid_locate_x][13]], [output_tnsr[i][grid_locate_y][grid_locate_x][10],
+                    output_tnsr[i][grid_locate_y][grid_locate_x][11],output_tnsr[i] [grid_locate_y][grid_locate_x][12] , output_tnsr[grid_locate_y][grid_locate_x][13]])
 
 
             total_loss = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
@@ -171,7 +178,7 @@ def train(epochs):
                     output_tnsr_val = val_sample['coord']
                     grid_locate_x = val_sample['grid_locate_x']
                     grid_locate_y = val_sample['grid_locate_y']
-                    #print('output_tnsr_val',output_tnsr_val)          
+                    print('output_tnsr_val',output_tnsr_val)          
 
                     if device == 'cuda':
                         val_img = val_img.type(torch.cuda.LongTensor)
@@ -212,16 +219,16 @@ def train(epochs):
 
                 for test_i, test_sample in enumerate(test_loader):
                     test_img = test_sample['image']
-                    output_tnsr_val = test_sample['coord']
+                    output_tnsr_test = test_sample['coord']
                     grid_locate_x = test_sample['grid_locate_x']
                     grid_locate_y = test_sample['grid_locate_y']
-                    #print('output_tnsr_val',output_tnsr_val)          
+                    print('output_tnsr_test',output_tnsr_test)          
 
                     if device == 'cuda':
                         test_img = test_img.type(torch.cuda.LongTensor)
-                        output_tnsr_val = output_tnsr_val.type(torch.cuda.LongTensor)
+                        output_tnsr_test = output_tnsr_test.type(torch.cuda.LongTensor)
                         test_img = test_img.cuda()
-                        output_tnsr_val = output_tnsr_val.cuda()
+                        output_tnsr_test = output_tnsr_test.cuda()
                         pass
 
                     pred_tnsr = model(test_img)
@@ -231,23 +238,23 @@ def train(epochs):
                     loss_class = 0
                     loss_bounding_coord = 0
                     for i in range(0,7):
-                        if output_tnsr_val[i][grid_locate_y][grid_locate_x][0] > -2:
-                            loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y][grid_locate_x][0], output_tnsr_val[i][grid_locate_y][grid_locate_x][0])
+                        if output_tnsr_test[i][grid_locate_y][grid_locate_x][0] > -2:
+                            loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y][grid_locate_x][0], output_tnsr_test[i][grid_locate_y][grid_locate_x][0])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][1], output_tnsr_val[i][grid_locate_y][grid_locate_x][1])
+                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][1], output_tnsr_test[i][grid_locate_y][grid_locate_x][1])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y][grid_locate_x][3],
-                            pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[grid_locate_y][grid_locate_x][6]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][3],
-                            output_tnsr_val[i][grid_locate_y][grid_locate_x][4],output_tnsr_val[i] [grid_locate_y][grid_locate_x][5] , output_tnsr_val[grid_locate_y][grid_locate_x][6]])
+                            pred_tnsr[i][grid_locate_y][grid_locate_x][4],pred_tnsr[i] [grid_locate_y][grid_locate_x][5] , pred_tnsr[grid_locate_y][grid_locate_x][6]], [output_tnsr_test[i][grid_locate_y][grid_locate_x][3],
+                            output_tnsr_test[i][grid_locate_y][grid_locate_x][4],output_tnsr_test[i] [grid_locate_y][grid_locate_x][5] , output_tnsr_test[grid_locate_y][grid_locate_x][6]])
 
                         else:
-                            loss_pc += criterion_coord(output_tnsr_val[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
+                            loss_pc += criterion_coord(output_tnsr_test[i][grid_locate_y][grid_locate_x][7], pred_tnsr[i][grid_locate_y][grid_locate_x][7])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][9], output_tnsr_val[i][grid_locate_y][grid_locate_x][9])
+                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y][grid_locate_x][9], output_tnsr_test[i][grid_locate_y][grid_locate_x][9])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y][grid_locate_x][10],
-                            pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[grid_locate_y][grid_locate_x][13]], [output_tnsr_val[i][grid_locate_y][grid_locate_x][10],
-                            output_tnsr_val[i][grid_locate_y][grid_locate_x][11],output_tnsr_val[i] [grid_locate_y][grid_locate_x][12] , output_tnsr_val[grid_locate_y][grid_locate_x][13]])
+                            pred_tnsr[i][grid_locate_y][grid_locate_x][11],pred_tnsr[i] [grid_locate_y][grid_locate_x][12] , pred_tnsr[grid_locate_y][grid_locate_x][13]], [output_tnsr_test[i][grid_locate_y][grid_locate_x][10],
+                            output_tnsr_test[i][grid_locate_y][grid_locate_x][11],output_tnsr_test[i] [grid_locate_y][grid_locate_x][12] , output_tnsr_test[grid_locate_y][grid_locate_x][13]])
 
 
                     total_loss_test = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
