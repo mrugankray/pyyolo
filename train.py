@@ -242,7 +242,7 @@ def train(epochs):
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
                     loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
 
-                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1])
+                    loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]], [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
 
                     loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
                     pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]], [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
@@ -253,7 +253,7 @@ def train(epochs):
                 else:
                     loss_pc += criterion_coord(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
 
-                    loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9])
+                    loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]], [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]])
 
                     loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
                     pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][12] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]], [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
@@ -303,7 +303,7 @@ def train(epochs):
                         if output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
                             loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][0])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][1])
+                            loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]], [output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][1]])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
                             pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]], [output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][3],
@@ -314,7 +314,7 @@ def train(epochs):
                         else:
                             loss_pc += criterion_coord(output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][7], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9], output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][9])
+                            loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]], [output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][9]])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
                             pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]], [output_tnsr_val[i][grid_locate_y[i]][grid_locate_x[i]][10],
@@ -350,7 +350,7 @@ def train(epochs):
                         if output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
                             loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][0])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][1])
+                            loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]], [output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][1]])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
                             pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]], [output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][3],
@@ -361,7 +361,7 @@ def train(epochs):
                         else:
                             loss_pc += criterion_coord(output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][7], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
 
-                            loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9], output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][9])
+                            loss_class += criterion_img([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]], [output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][9]])
 
                             loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
                             pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]], [output_tnsr_test[i][grid_locate_y[i]][grid_locate_x[i]][10],
