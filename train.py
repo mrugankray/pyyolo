@@ -251,7 +251,7 @@ def train(epochs):
                     continue
 
                 else:
-                    loss_pc += criterion_coord(output_tns_testr[i][grid_locate_y[i]][grid_locate_x[i]][7], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
+                    loss_pc += criterion_coord(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
 
                     loss_class += criterion_img(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9])
 
