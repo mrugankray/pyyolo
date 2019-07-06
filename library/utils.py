@@ -130,9 +130,11 @@ def find_grid(xcenter, ycenter):
             result['ycenter'] = gridy
             county = county + 1
             #print(resy)
+    #print(result)
     return result
 
-#find_grid(10, 220)
+#find_grid(10, 10)
+#{'xcenter': 1, 'ycenter': 1}
 
 def find_grid_coord(xcenter, ycenter, x_min, x_max , y_min , y_max ):
     grid = find_grid(xcenter = xcenter, ycenter = ycenter)
@@ -198,6 +200,21 @@ def find_iou(bounding_box1, bounding_box2):
 
 #find_grid_coord(17, 16, x_min=50, x_max=150, y_min=100, y_max=300)
 
+def output_tensor(xcenter, ycenter, input_array):
+    grid = find_grid(xcenter = xcenter, ycenter = ycenter)
+    gridx = grid['xcenter'] - 1
+    gridy = grid['ycenter'] - 1
+    #print(gridx)
+    numpy_tensor = np.zeros((14, 14, 14))
+    numpy_tensor[gridy][gridx] = input_array
+    #print(numpy_tensor[gridy][gridx])
+    return numpy_tensor
+    #print(gridx, gridy)
+    #print(numpy_tensor[gridy][0:])
+
+
+#output_tensor(xcenter = 200, ycenter = 150, input_array = [1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+
 class give_value(object):
     def __call__(self, sample):#img_name, xmin, xmax, ymin, ymax
 
@@ -249,26 +266,15 @@ class give_value(object):
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
 
         #print('input_vector', input_vector)
+        #print('grid_coord_wrt_grid[0]', grid_coord_wrt_grid[0])
         output_tnsr = output_tensor(xcenter = xcenter, ycenter = ycenter, input_array = input_vector)
         output_tnsr = np.array(output_tnsr)
         #print('output tensor shape', output_tnsr.shape)
         #print(output_tnsr)
-        return {'image': sample['image'], 'coord': output_tnsr, 'img_name': sample['img_name'], 'grid_locate_x':grid_locate_x,'grid_locate_y':grid_locate_y}
+        #print(output_tnsr[grid_locate_y][grid_locate_x])
+        return {'image': sample['image'], 'coord': output_tnsr, 'img_name': sample['img_name'], 'grid_locate_x':grid_locate_x - 1,'grid_locate_y':grid_locate_y - 1}
 
 #give_value_obj = give_value(img_name = None, xmin = None, xmax = None, ymin = None, ymax = None)
-
-def output_tensor(xcenter, ycenter, input_array):
-    grid = find_grid(xcenter = xcenter, ycenter = ycenter)
-    gridx = grid['xcenter'] - 1
-    gridy = grid['ycenter'] - 1
-    numpy_tensor = np.zeros((14, 14, 14))
-    numpy_tensor[gridy][gridx] = input_array
-    return numpy_tensor
-    #print(gridx, gridy)
-    #print(numpy_tensor[gridy][0:])
-
-
-#output_tensor(xcenter = 200, ycenter = 150, input_array = [1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
 class yoloDataset(Dataset):
     def __init__(self, rootDirImg, rootDirCoord, transform = None):
@@ -415,7 +421,7 @@ class ToTensor(object):
         
         image = image.transpose((2,0,1))
         #print('image shape after transpose', image.shape)
-        coord = coord.transpose((2,0,1))
+
         return {'image': image, 'coord': coord, 'img_name': sample['img_name'],'grid_locate_x':sample['grid_locate_x'],'grid_locate_y':sample['grid_locate_y']}
 
 ##testing##
@@ -430,8 +436,9 @@ num_of_pics = 1
     #idx = 0
     sample = dataset[idx]
     #print(sample)
-    print('img name:',sample['img_name'])
-    print('coordinates:', sample['coord'])
+    #print('img name:',sample['img_name'])
+    #print("sample['grid_locate_x']", sample['grid_locate_x'])
+    print('tensor:', sample['coord'][sample['grid_locate_y'] - 1][sample['grid_locate_x'] - 1])
     showCenter(img = sample['image'], xmin = sample['coord'][0],xmax = sample['coord'][1],ymin = sample['coord'][2],ymax = sample['coord'][3])'''
 
 '''showCenter(Imgpath = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/dogs_imgs/dog-27.jpg',TxtrootDirCoordPath = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts/dog-27.txt')'''
