@@ -239,6 +239,10 @@ def train(epochs):
             loss_bounding_coord = 0
             for i in range(0,7):
                 print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
+                print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
+                print('[output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
+
+                
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
                     loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
 
