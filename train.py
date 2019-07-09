@@ -321,6 +321,23 @@ def train(epochs):
                     output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],output_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12] , output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]])
 
                     continue
+
+            # converting lists to numpy array
+            pc_pred_global_list = np.array(pc_pred_global_list)
+            pc_inp_tnsr_global_list = np.array(pc_inp_tnsr_global_list)
+            class_scores_global_list = np.array(class_scores_global_list)
+            orginal_class_global_list = np.array(orginal_class_global_list)
+            coord_pred_global_list = np.array(coord_pred_global_list)
+            coord_inp_global_list = np.array(coord_inp_global_list)
+
+            #converting numpy array to tensors
+            pc_pred_global_list = torch.from_numpy(pc_pred_global_list)
+            pc_inp_tnsr_global_list = torch.from_numpy(pc_inp_tnsr_global_list)
+            class_scores_global_list = torch.from_numpy(class_scores_global_list)
+            orginal_class_global_list = torch.from_numpy(orginal_class_global_list)
+            coord_pred_global_list = torch.from_numpy(coord_pred_global_list)
+            coord_inp_global_list = torch.from_numpy(coord_inp_global_list)
+
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
             loss_class = criterion_img(class_scores_global_list, orginal_class_global_list)
             loss_bounding_coord = criterion_coord(coord_pred_global_list, coord_inp_global_list)
@@ -435,6 +452,23 @@ def train(epochs):
 
                             continue
 
+                    # converting lists to numpy array
+                    pc_pred_global_list_val = np.array(pc_pred_global_list_val)
+                    pc_inp_tnsr_global_list_val = np.array(pc_inp_tnsr_global_list_val)
+                    class_scores_global_list_val = np.array(class_scores_global_list_val)
+                    orginal_class_global_list_val = np.array(orginal_class_global_list_val)
+                    coord_pred_global_list_val = np.array(coord_pred_global_list_val)
+                    coord_inp_global_list_val = np.array(coord_inp_global_list_val)
+
+                    #converting numpy array to tensors
+                    pc_pred_global_list_val = torch.from_numpy(pc_pred_global_list_val)
+                    pc_inp_tnsr_global_list_val = torch.from_numpy(pc_inp_tnsr_global_list_val)
+                    class_scores_global_list_val = torch.from_numpy(class_scores_global_list_val)
+                    orginal_class_global_list_val = torch.from_numpy(orginal_class_global_list_val)
+                    coord_pred_global_list_val = torch.from_numpy(coord_pred_global_list_val)
+                    coord_inp_global_list_val = torch.from_numpy(coord_inp_global_list_val)
+
+
                     loss_pc = criterion_coord(pc_pred_global_list_val, pc_inp_tnsr_global_list_val)
                     loss_class = criterion_img(class_scores_global_list_val, orginal_class_global_list_val)
                     loss_bounding_coord = criterion_coord(coord_pred_global_list_val, coord_inp_global_list_val)
@@ -536,6 +570,23 @@ def train(epochs):
                             output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],output_tnsr_test[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][12] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]])'''
 
                             continue
+
+                    # converting lists to numpy array
+                    pc_pred_global_list_test = np.array(pc_pred_global_list_test)
+                    pc_inp_tnsr_global_list_test = np.array(pc_inp_tnsr_global_list_test)
+                    class_scores_global_list_test = np.array(class_scores_global_list_test)
+                    orginal_class_global_list_test = np.array(orginal_class_global_list_test)
+                    coord_pred_global_list_test = np.array(coord_pred_global_list_test)
+                    coord_inp_global_list_test = np.array(coord_inp_global_list_test)
+
+                    #converting numpy array to tensors
+                    pc_pred_global_list_test = torch.from_numpy(pc_pred_global_list_test)
+                    pc_inp_tnsr_global_list_test = torch.from_numpy(pc_inp_tnsr_global_list_test)
+                    class_scores_global_list_test = torch.from_numpy(class_scores_global_list_test)
+                    orginal_class_global_list_test = torch.from_numpy(orginal_class_global_list_test)
+                    coord_pred_global_list_test = torch.from_numpy(coord_pred_global_list_test)
+                    coord_inp_global_list_test = torch.from_numpy(coord_inp_global_list_test)
+
 
                     loss_pc = criterion_coord(pc_pred_global_list_test, pc_inp_tnsr_global_list_test)
                     loss_class = criterion_img(class_scores_global_list_test, orginal_class_global_list_test)
