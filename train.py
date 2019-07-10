@@ -209,9 +209,9 @@ def train(epochs):
 
             if train_on_gpu:
                 trn_img = trn_img.type(torch.FloatTensor)
-                output_tnsr = output_tnsr.type(torch.FloatTensor)
+                #output_tnsr = output_tnsr.type(torch.FloatTensor)
                 trn_img = trn_img.cuda()
-                output_tnsr = output_tnsr.cuda()
+                #output_tnsr = output_tnsr.cuda()
                 pass
 
             #optizer to 0 grad
@@ -244,6 +244,16 @@ def train(epochs):
             pc_inp_tnsr_global_list = []
             coord_pred_global_list = []
             coord_inp_global_list = []
+            pred_tnsr = pred_tnsr.cpu().detach().numpy()
+            grid_locate_x = grid_locate_x.detach().numpy()
+            grid_locate_y = grid_locate_y.detach().numpy()
+            output_tnsr = output_tnsr.detach().numpy()
+            #print('output_tnsr[0][0]',output_tnsr[0][0])
+            #print('grid_locate_x', type(grid_locate_x))
+            #print('output_tnsr', type(output_tnsr))
+            #print('grid_locate_y', type(grid_locate_y))
+            #print('pred_tnsr',type(pred_tnsr))
+            #print('pred_tnsr[0][0]', pred_tnsr[0][0])
             for i in range(0,8):
                 '''print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
                 print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
@@ -269,7 +279,7 @@ def train(epochs):
 
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
 
-                    class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1].detach().numpy(), pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][2].detach().numpy()])
+                    class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][2]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
                     class_scores_list = np.squeeze(class_scores_list)
                     orginal_class = np.array(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1])
@@ -279,12 +289,12 @@ def train(epochs):
                     
                     orginal_class_global_list.append(orginal_class)
                     
-                    pc_pred_global_list.append(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0].detach().numpy())
+                    pc_pred_global_list.append(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
                     
                     pc_inp_tnsr_global_list.append(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
                     
-                    coord_pred_global_list.append([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3].detach().numpy(),
-                    pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4].detach().numpy(),pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5].detach().numpy() , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6].detach().numpy()])
+                    coord_pred_global_list.append([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
+                    pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]])
                     
                     coord_inp_global_list.append([output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
                     output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],output_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]])
@@ -303,7 +313,7 @@ def train(epochs):
 
                 else:
 
-                    class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][8].detach().numpy(), pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9].detach().numpy()])
+                    class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][8], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
                     class_scores_list = np.squeeze(class_scores_list)
                     orginal_class = np.array(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9])
@@ -313,12 +323,12 @@ def train(epochs):
                     
                     orginal_class_global_list.append(orginal_class)
                     
-                    pc_pred_global_list.append(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7].detach().numpy())
+                    pc_pred_global_list.append(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
                     
                     pc_inp_tnsr_global_list.append(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][7])
                     
-                    coord_pred_global_list.append([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10].detach().numpy(),
-                    pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11].detach().numpy(),pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12].detach().numpy() , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13].detach().numpy()])
+                    coord_pred_global_list.append([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
+                    pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]])
                     
                     coord_inp_global_list.append([output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][10],
                     output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][11],output_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][12] , output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][13]])
@@ -334,7 +344,7 @@ def train(epochs):
             coord_inp_global_list = np.array(coord_inp_global_list)
 
             #reshaping numpy array
-            pc_pred_global_list = np.reshape(pc_pred_global_list,(batch_size, 1))
+            pc_pred_global_list = np.reshape(pc_pred_global_list,(batch_size, 1)) #size becomes 8,1
             pc_inp_tnsr_global_list = np.reshape(pc_inp_tnsr_global_list,(batch_size, 1))
 
             #converting numpy array to tensors
@@ -352,27 +362,34 @@ def train(epochs):
             print(type(coord_pred_global_list))
             print(type(coord_inp_global_list))'''
             
-            print(pc_pred_global_list.shape)
+            '''print(pc_pred_global_list.shape)
             print(pc_inp_tnsr_global_list.shape)
             print(class_scores_global_list.shape)
             print(orginal_class_global_list.shape)
             print(coord_pred_global_list.shape)
-            print(coord_inp_global_list.shape)
+            print(coord_inp_global_list.shape)'''
 
             if train_on_gpu:
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.FloatTensor)
+                pc_pred_global_list = pc_pred_global_list.type(torch.FloatTensor)
                 pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.FloatTensor)
                 class_scores_global_list = class_scores_global_list.type(torch.FloatTensor)
                 orginal_class_global_list = orginal_class_global_list.type(torch.FloatTensor)
                 coord_pred_global_list = coord_pred_global_list.type(torch.FloatTensor)
                 coord_inp_global_list = coord_inp_global_list.type(torch.FloatTensor)
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
+                pc_pred_global_list = pc_pred_global_list.cuda()
                 pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
                 class_scores_global_list = class_scores_global_list.cuda()
                 orginal_class_global_list = orginal_class_global_list.cuda()
                 coord_pred_global_list = coord_pred_global_list.cuda()
                 coord_inp_global_list = coord_inp_global_list.cuda()
                 pass
+
+            '''print(pc_pred_global_list)
+            print(pc_inp_tnsr_global_list)
+            print(class_scores_global_list)
+            print(orginal_class_global_list)
+            print(coord_pred_global_list)
+            print(coord_inp_global_list)'''
 
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
             loss_class = criterion_img(class_scores_global_list, orginal_class_global_list)
@@ -408,9 +425,9 @@ def train(epochs):
 
                     if train_on_gpu:
                         val_img = val_img.type(torch.FloatTensor)
-                        output_tnsr_val = output_tnsr_val.type(torch.FloatTensor)
+                        #output_tnsr_val = output_tnsr_val.type(torch.FloatTensor)
                         val_img = val_img.cuda()
-                        output_tnsr_val = output_tnsr_val.cuda()
+                        #output_tnsr_val = output_tnsr_val.cuda()
                         pass
 
                     pred_tnsr = model(val_img)
@@ -425,10 +442,14 @@ def train(epochs):
                     pc_inp_tnsr_global_list_val = []
                     coord_pred_global_list_val = []
                     coord_inp_global_list_val = []
+                    pred_tnsr = pred_tnsr.cpu().detach().numpy()
+                    grid_locate_x_val = grid_locate_x_val.detach().numpy()
+                    grid_locate_y_val = grid_locate_y_val.detach().numpy()
+                    output_tnsr_val = output_tnsr_val.detach().numpy()
                     for i in range(0,8):
                         if output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0] > -2:
 
-                            class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][1].detach().numpy(), pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][2].detach().numpy()])
+                            class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][1], pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][2]])
                             class_scores_list_val = np.reshape(class_scores_list_val, (1,2))
                             class_scores_list_val = np.squeeze(class_scores_list_val)
                             orginal_class_val = np.array(output_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][1])
@@ -438,12 +459,12 @@ def train(epochs):
                             
                             orginal_class_global_list_val.append(orginal_class_val)
                             
-                            pc_pred_global_list_val.append(pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0].detach().numpy())
+                            pc_pred_global_list_val.append(pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0])
                             
                             pc_inp_tnsr_global_list_val.append(output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0])
                             
-                            coord_pred_global_list_val.append([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3].detach().numpy(),
-                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4].detach().numpy(),pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5].detach().numpy() , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6].detach().numpy()])
+                            coord_pred_global_list_val.append([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3],
+                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4],pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5] , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6]])
                             
                             coord_inp_global_list_val.append([output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3],
                             output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6]])
@@ -460,7 +481,7 @@ def train(epochs):
 
                         else:
 
-                            class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][8].detach().numpy(), pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][9].detach().numpy()])
+                            class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][8], pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][9]])
                             class_scores_list_val = np.reshape(class_scores_list_val, (1,2))
                             class_scores_list_val = np.squeeze(class_scores_list_val)
                             orginal_class_val = np.array(output_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][9])
@@ -470,12 +491,12 @@ def train(epochs):
                             
                             orginal_class_global_list_val.append(orginal_class_val)
                             
-                            pc_pred_global_list_val.append(pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][7].detach().numpy())
+                            pc_pred_global_list_val.append(pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][7])
                             
                             pc_inp_tnsr_global_list_val.append(output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][7])
                             
-                            coord_pred_global_list_val.append([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10].detach().numpy(),
-                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11].detach().numpy(),pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12].detach().numpy() , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13].detach().numpy()])
+                            coord_pred_global_list_val.append([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10],
+                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11],pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12] , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13]])
                             
                             coord_inp_global_list_val.append([output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10],
                             output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13]])
@@ -511,13 +532,13 @@ def train(epochs):
                     coord_inp_global_list_val = torch.from_numpy(coord_inp_global_list_val)
 
                     if train_on_gpu:
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.FloatTensor)
+                        pc_pred_global_list_val = pc_pred_global_list_val.type(torch.FloatTensor)
                         pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.FloatTensor)
                         class_scores_global_list_val = class_scores_global_list_val.type(torch.FloatTensor)
                         orginal_class_global_list_val = orginal_class_global_list_val.type(torch.FloatTensor)
                         coord_pred_global_list_val = coord_pred_global_list_val.type(torch.FloatTensor)
                         coord_inp_global_list_val = coord_inp_global_list_val.type(torch.FloatTensor)
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
+                        pc_pred_global_list_val = pc_pred_global_list_val.cuda()
                         pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
                         class_scores_global_list_val = class_scores_global_list_val.cuda()
                         orginal_class_global_list_val = orginal_class_global_list_val.cuda()
@@ -547,9 +568,9 @@ def train(epochs):
 
                     if train_on_gpu:
                         test_img = test_img.type(torch.FloatTensor)
-                        output_tnsr_test = output_tnsr_test.type(torch.FloatTensor)
+                        #output_tnsr_test = output_tnsr_test.type(torch.FloatTensor)
                         test_img = test_img.cuda()
-                        output_tnsr_test = output_tnsr_test.cuda()
+                        #output_tnsr_test = output_tnsr_test.cuda()
                         pass
 
                     pred_tnsr = model(test_img)
@@ -564,10 +585,14 @@ def train(epochs):
                     pc_inp_tnsr_global_list_test = []
                     coord_pred_global_list_test = []
                     coord_inp_global_list_test = []
+                    pred_tnsr = pred_tnsr.cpu().detach().numpy()
+                    grid_locate_x_test = grid_locate_x_test.detach().numpy()
+                    grid_locate_y_test = grid_locate_y_test.detach().numpy()
+                    output_tnsr_test = output_tnsr_test.detach().numpy()
                     for i in range(0,8):
                         if output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0] > -2:
 
-                            class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][1].detach().numpy(), pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][2].detach().numpy()])
+                            class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][1], pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][2]])
                             class_scores_list_test = np.reshape(class_scores_list_test, (1,2))
                             class_scores_list_test = np.squeeze(class_scores_list_test)
                             orginal_class_test = np.array(output_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][1])
@@ -577,12 +602,12 @@ def train(epochs):
                             
                             orginal_class_global_list_test.append(orginal_class_test)
                             
-                            pc_pred_global_list_test.append(pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0].detach().numpy())
+                            pc_pred_global_list_test.append(pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0])
                             
                             pc_inp_tnsr_global_list_test.append(output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0])
                             
-                            coord_pred_global_list_test.append([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3].detach().numpy(),
-                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4].detach().numpy(),pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][5].detach().numpy() , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6].detach().numpy()])
+                            coord_pred_global_list_test.append([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3],
+                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4],pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][5] , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6]])
                             
                             coord_inp_global_list_test.append([output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3],
                             output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4],output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][5] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6]])
@@ -600,7 +625,7 @@ def train(epochs):
 
                         else:
 
-                            class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][8].detach().numpy(), pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][9].detach().numpy()])
+                            class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][8], pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][9]])
                             class_scores_list_test = np.reshape(class_scores_list_test, (1,2))
                             class_scores_list_test = np.squeeze(class_scores_list_test)
                             orginal_class_test = np.array(output_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][9])
@@ -610,12 +635,12 @@ def train(epochs):
                             
                             orginal_class_global_list_test.append(orginal_class_test)
                             
-                            pc_pred_global_list_test.append(pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][7].detach().numpy())
+                            pc_pred_global_list_test.append(pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][7])
                             
                             pc_inp_tnsr_global_list_test.append(output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][7])
                             
-                            coord_pred_global_list_test.append([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10].detach().numpy(),
-                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11].detach().numpy(),pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][12].detach().numpy() , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13].detach().numpy()])
+                            coord_pred_global_list_test.append([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10],
+                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][12] , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]])
                             
                             coord_inp_global_list_test.append([output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10],
                             output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][12] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]])
@@ -651,13 +676,13 @@ def train(epochs):
                     coord_inp_global_list_test = torch.from_numpy(coord_inp_global_list_test)
 
                     if train_on_gpu:
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.FloatTensor)
+                        pc_pred_global_list_test = pc_pred_global_list_test.type(torch.FloatTensor)
                         pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.FloatTensor)
                         class_scores_global_list_test = class_scores_global_list_test.type(torch.FloatTensor)
                         orginal_class_global_list_val = orginal_class_global_list_test.type(torch.FloatTensor)
                         coord_pred_global_list_test = coord_pred_global_list_test.type(torch.FloatTensor)
                         coord_inp_global_list_test = coord_inp_global_list_test.type(torch.FloatTensor)
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
+                        pc_pred_global_list_test = pc_pred_global_list_test.cuda()
                         pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
                         class_scores_global_list_test = class_scores_global_list_test.cuda()
                         orginal_class_global_list_test = orginal_class_global_list_test.cuda()
