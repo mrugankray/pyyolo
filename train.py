@@ -179,7 +179,7 @@ criterion_img = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 if device == 'cuda':
-    model = model.cuda()
+    model = model.to(device)
 
 #print(device)
 
@@ -209,8 +209,8 @@ def train(epochs):
             if device == 'cuda':
                 trn_img = trn_img.type(torch.cuda.LongTensor)
                 output_tnsr = output_tnsr.type(torch.cuda.LongTensor)
-                trn_img = trn_img.cuda()
-                output_tnsr = output_tnsr.cuda()
+                trn_img = trn_img.to(device)
+                output_tnsr = output_tnsr.to(device)
                 pass
 
             #optizer to 0 grad
@@ -243,7 +243,7 @@ def train(epochs):
             pc_inp_tnsr_global_list = []
             coord_pred_global_list = []
             coord_inp_global_list = []
-            for i in range(0,7):
+            for i in range(0,8):
                 '''print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
                 print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
                 print('[output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])'''
@@ -332,6 +332,10 @@ def train(epochs):
             coord_pred_global_list = np.array(coord_pred_global_list)
             coord_inp_global_list = np.array(coord_inp_global_list)
 
+            #reshaping numpy array
+            pc_pred_global_list = np.reshape(pc_pred_global_list,(batch_size, 1))
+            pc_inp_tnsr_global_list = np.reshape(pc_inp_tnsr_global_list,(batch_size, 1))
+
             #converting numpy array to tensors
             pc_pred_global_list = torch.from_numpy(pc_pred_global_list)
             pc_inp_tnsr_global_list = torch.from_numpy(pc_inp_tnsr_global_list)
@@ -340,12 +344,19 @@ def train(epochs):
             coord_pred_global_list = torch.from_numpy(coord_pred_global_list)
             coord_inp_global_list = torch.from_numpy(coord_inp_global_list)
 
-            print(type(pc_pred_global_list))
+            '''print(type(pc_pred_global_list))
             print(type(pc_inp_tnsr_global_list))
             print(type(class_scores_global_list))
             print(type(orginal_class_global_list))
             print(type(coord_pred_global_list))
-            print(type(coord_inp_global_list))
+            print(type(coord_inp_global_list))'''
+            
+            print(pc_pred_global_list.shape)
+            print(pc_inp_tnsr_global_list.shape)
+            print(class_scores_global_list.shape)
+            print(orginal_class_global_list.shape)
+            print(coord_pred_global_list.shape)
+            print(coord_inp_global_list.shape)
 
             if device == 'cuda':
                 pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.cuda.LongTensor)
@@ -354,12 +365,12 @@ def train(epochs):
                 orginal_class_global_list = orginal_class_global_list.type(torch.cuda.LongTensor)
                 coord_pred_global_list = coord_pred_global_list.type(torch.cuda.LongTensor)
                 coord_inp_global_list = coord_inp_global_list.type(torch.cuda.LongTensor)
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
-                class_scores_global_list = class_scores_global_list.cuda()
-                orginal_class_global_list = orginal_class_global_list.cuda()
-                coord_pred_global_list = coord_pred_global_list.cuda()
-                coord_inp_global_list = coord_inp_global_list.cuda()
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.to(device)
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.to(device)
+                class_scores_global_list = class_scores_global_list.to(device)
+                orginal_class_global_list = orginal_class_global_list.to(device)
+                coord_pred_global_list = coord_pred_global_list.to(device)
+                coord_inp_global_list = coord_inp_global_list.to(device)
                 pass
 
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
@@ -397,8 +408,8 @@ def train(epochs):
                     if device == 'cuda':
                         val_img = val_img.type(torch.cuda.LongTensor)
                         output_tnsr_val = output_tnsr_val.type(torch.cuda.LongTensor)
-                        val_img = val_img.cuda()
-                        output_tnsr_val = output_tnsr_val.cuda()
+                        val_img = val_img.to(device)
+                        output_tnsr_val = output_tnsr_val.to(device)
                         pass
 
                     pred_tnsr = model(val_img)
@@ -413,7 +424,7 @@ def train(epochs):
                     pc_inp_tnsr_global_list_val = []
                     coord_pred_global_list_val = []
                     coord_inp_global_list_val = []
-                    for i in range(0,7):
+                    for i in range(0,8):
                         if output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0] > -2:
 
                             class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][1].detach().numpy(), pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][2].detach().numpy()])
@@ -486,6 +497,10 @@ def train(epochs):
                     coord_pred_global_list_val = np.array(coord_pred_global_list_val)
                     coord_inp_global_list_val = np.array(coord_inp_global_list_val)
 
+                    #reshaping numpy array
+                    pc_pred_global_list_val = np.reshape(pc_pred_global_list_val,(batch_size, 1))
+                    pc_inp_tnsr_global_list_val = np.reshape(pc_inp_tnsr_global_list_val,(batch_size, 1))
+
                     #converting numpy array to tensors
                     pc_pred_global_list_val = torch.from_numpy(pc_pred_global_list_val)
                     pc_inp_tnsr_global_list_val = torch.from_numpy(pc_inp_tnsr_global_list_val)
@@ -501,12 +516,12 @@ def train(epochs):
                         orginal_class_global_list_val = orginal_class_global_list_val.type(torch.cuda.LongTensor)
                         coord_pred_global_list_val = coord_pred_global_list_val.type(torch.cuda.LongTensor)
                         coord_inp_global_list_val = coord_inp_global_list_val.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
-                        class_scores_global_list_val = class_scores_global_list_val.cuda()
-                        orginal_class_global_list_val = orginal_class_global_list_val.cuda()
-                        coord_pred_global_list_val = coord_pred_global_list_val.cuda()
-                        coord_inp_global_list_val = coord_inp_global_list_val.cuda()
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.to(device)
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.to(device)
+                        class_scores_global_list_val = class_scores_global_list_val.to(device)
+                        orginal_class_global_list_val = orginal_class_global_list_val.to(device)
+                        coord_pred_global_list_val = coord_pred_global_list_val.to(device)
+                        coord_inp_global_list_val = coord_inp_global_list_val.to(device)
                         pass
 
 
@@ -532,8 +547,8 @@ def train(epochs):
                     if device == 'cuda':
                         test_img = test_img.type(torch.cuda.LongTensor)
                         output_tnsr_test = output_tnsr_test.type(torch.cuda.LongTensor)
-                        test_img = test_img.cuda()
-                        output_tnsr_test = output_tnsr_test.cuda()
+                        test_img = test_img.to(device)
+                        output_tnsr_test = output_tnsr_test.to(device)
                         pass
 
                     pred_tnsr = model(test_img)
@@ -548,7 +563,7 @@ def train(epochs):
                     pc_inp_tnsr_global_list_test = []
                     coord_pred_global_list_test = []
                     coord_inp_global_list_test = []
-                    for i in range(0,7):
+                    for i in range(0,8):
                         if output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0] > -2:
 
                             class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][1].detach().numpy(), pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][2].detach().numpy()])
@@ -622,6 +637,10 @@ def train(epochs):
                     coord_pred_global_list_test = np.array(coord_pred_global_list_test)
                     coord_inp_global_list_test = np.array(coord_inp_global_list_test)
 
+                    #reshaping numpy array
+                    pc_pred_global_list_test = np.reshape(pc_pred_global_list_test,(batch_size, 1))
+                    pc_inp_tnsr_global_list_test = np.reshape(pc_inp_tnsr_global_list_test,(batch_size, 1))
+
                     #converting numpy array to tensors
                     pc_pred_global_list_test = torch.from_numpy(pc_pred_global_list_test)
                     pc_inp_tnsr_global_list_test = torch.from_numpy(pc_inp_tnsr_global_list_test)
@@ -637,12 +656,12 @@ def train(epochs):
                         orginal_class_global_list_val = orginal_class_global_list_test.type(torch.cuda.LongTensor)
                         coord_pred_global_list_test = coord_pred_global_list_test.type(torch.cuda.LongTensor)
                         coord_inp_global_list_test = coord_inp_global_list_test.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
-                        class_scores_global_list_test = class_scores_global_list_test.cuda()
-                        orginal_class_global_list_test = orginal_class_global_list_test.cuda()
-                        coord_pred_global_list_test = coord_pred_global_list_test.cuda()
-                        coord_inp_global_list_test = coord_inp_global_list_test.cuda()
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.to(device)
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.to(device)
+                        class_scores_global_list_test = class_scores_global_list_test.to(device)
+                        orginal_class_global_list_test = orginal_class_global_list_test.to(device)
+                        coord_pred_global_list_test = coord_pred_global_list_test.to(device)
+                        coord_inp_global_list_test = coord_inp_global_list_test.to(device)
                         pass
 
                     loss_pc = criterion_coord(pc_pred_global_list_test, pc_inp_tnsr_global_list_test)
