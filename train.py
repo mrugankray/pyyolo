@@ -48,6 +48,7 @@ val_loader = DataLoader(transformed_train_dataset, num_workers = num_workers, ba
 test_loader = DataLoader(transformed_test_dataset, batch_size = batch_size, shuffle = True, num_workers = num_workers)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+train_on_gpu = torch.cuda.is_available()
 
 class Net(nn.Module):
     def __init__(self):
@@ -178,8 +179,8 @@ criterion_img = nn.CrossEntropyLoss()
 #Optimizer#
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
-if device == 'cuda':
-    model = model.to(device)
+if train_on_gpu:
+    model = model.cuda()
 
 #print(device)
 
@@ -206,11 +207,11 @@ def train(epochs):
             print('output_tnsr_val shape',output_tnsr.shape)    
             print('image shape', trn_img.shape)      
 
-            if device == 'cuda':
-                trn_img = trn_img.type(torch.cuda.LongTensor)
-                output_tnsr = output_tnsr.type(torch.cuda.LongTensor)
-                trn_img = trn_img.to(device)
-                output_tnsr = output_tnsr.to(device)
+            if train_on_gpu:
+                trn_img = trn_img.type(torch.FloatTensor)
+                output_tnsr = output_tnsr.type(torch.FloatTensor)
+                trn_img = trn_img.cuda()
+                output_tnsr = output_tnsr.cuda()
                 pass
 
             #optizer to 0 grad
@@ -358,19 +359,19 @@ def train(epochs):
             print(coord_pred_global_list.shape)
             print(coord_inp_global_list.shape)
 
-            if device == 'cuda':
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.cuda.LongTensor)
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.cuda.LongTensor)
-                class_scores_global_list = class_scores_global_list.type(torch.cuda.LongTensor)
-                orginal_class_global_list = orginal_class_global_list.type(torch.cuda.LongTensor)
-                coord_pred_global_list = coord_pred_global_list.type(torch.cuda.LongTensor)
-                coord_inp_global_list = coord_inp_global_list.type(torch.cuda.LongTensor)
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.to(device)
-                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.to(device)
-                class_scores_global_list = class_scores_global_list.to(device)
-                orginal_class_global_list = orginal_class_global_list.to(device)
-                coord_pred_global_list = coord_pred_global_list.to(device)
-                coord_inp_global_list = coord_inp_global_list.to(device)
+            if train_on_gpu:
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.FloatTensor)
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.FloatTensor)
+                class_scores_global_list = class_scores_global_list.type(torch.FloatTensor)
+                orginal_class_global_list = orginal_class_global_list.type(torch.FloatTensor)
+                coord_pred_global_list = coord_pred_global_list.type(torch.FloatTensor)
+                coord_inp_global_list = coord_inp_global_list.type(torch.FloatTensor)
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
+                pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.cuda()
+                class_scores_global_list = class_scores_global_list.cuda()
+                orginal_class_global_list = orginal_class_global_list.cuda()
+                coord_pred_global_list = coord_pred_global_list.cuda()
+                coord_inp_global_list = coord_inp_global_list.cuda()
                 pass
 
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
@@ -405,11 +406,11 @@ def train(epochs):
                     grid_locate_y_val = val_sample['grid_locate_y']
                     #print('output_tnsr_val',output_tnsr_val)          
 
-                    if device == 'cuda':
-                        val_img = val_img.type(torch.cuda.LongTensor)
-                        output_tnsr_val = output_tnsr_val.type(torch.cuda.LongTensor)
-                        val_img = val_img.to(device)
-                        output_tnsr_val = output_tnsr_val.to(device)
+                    if train_on_gpu:
+                        val_img = val_img.type(torch.FloatTensor)
+                        output_tnsr_val = output_tnsr_val.type(torch.FloatTensor)
+                        val_img = val_img.cuda()
+                        output_tnsr_val = output_tnsr_val.cuda()
                         pass
 
                     pred_tnsr = model(val_img)
@@ -509,19 +510,19 @@ def train(epochs):
                     coord_pred_global_list_val = torch.from_numpy(coord_pred_global_list_val)
                     coord_inp_global_list_val = torch.from_numpy(coord_inp_global_list_val)
 
-                    if device == 'cuda':
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.cuda.LongTensor)
-                        class_scores_global_list_val = class_scores_global_list_val.type(torch.cuda.LongTensor)
-                        orginal_class_global_list_val = orginal_class_global_list_val.type(torch.cuda.LongTensor)
-                        coord_pred_global_list_val = coord_pred_global_list_val.type(torch.cuda.LongTensor)
-                        coord_inp_global_list_val = coord_inp_global_list_val.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.to(device)
-                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.to(device)
-                        class_scores_global_list_val = class_scores_global_list_val.to(device)
-                        orginal_class_global_list_val = orginal_class_global_list_val.to(device)
-                        coord_pred_global_list_val = coord_pred_global_list_val.to(device)
-                        coord_inp_global_list_val = coord_inp_global_list_val.to(device)
+                    if train_on_gpu:
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.FloatTensor)
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.FloatTensor)
+                        class_scores_global_list_val = class_scores_global_list_val.type(torch.FloatTensor)
+                        orginal_class_global_list_val = orginal_class_global_list_val.type(torch.FloatTensor)
+                        coord_pred_global_list_val = coord_pred_global_list_val.type(torch.FloatTensor)
+                        coord_inp_global_list_val = coord_inp_global_list_val.type(torch.FloatTensor)
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
+                        pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.cuda()
+                        class_scores_global_list_val = class_scores_global_list_val.cuda()
+                        orginal_class_global_list_val = orginal_class_global_list_val.cuda()
+                        coord_pred_global_list_val = coord_pred_global_list_val.cuda()
+                        coord_inp_global_list_val = coord_inp_global_list_val.cuda()
                         pass
 
 
@@ -544,11 +545,11 @@ def train(epochs):
                     grid_locate_y_test = test_sample['grid_locate_y']
                     #print('output_tnsr_test',output_tnsr_test)          
 
-                    if device == 'cuda':
-                        test_img = test_img.type(torch.cuda.LongTensor)
-                        output_tnsr_test = output_tnsr_test.type(torch.cuda.LongTensor)
-                        test_img = test_img.to(device)
-                        output_tnsr_test = output_tnsr_test.to(device)
+                    if train_on_gpu:
+                        test_img = test_img.type(torch.FloatTensor)
+                        output_tnsr_test = output_tnsr_test.type(torch.FloatTensor)
+                        test_img = test_img.cuda()
+                        output_tnsr_test = output_tnsr_test.cuda()
                         pass
 
                     pred_tnsr = model(test_img)
@@ -649,19 +650,19 @@ def train(epochs):
                     coord_pred_global_list_test = torch.from_numpy(coord_pred_global_list_test)
                     coord_inp_global_list_test = torch.from_numpy(coord_inp_global_list_test)
 
-                    if device == 'cuda':
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.cuda.LongTensor)
-                        class_scores_global_list_test = class_scores_global_list_test.type(torch.cuda.LongTensor)
-                        orginal_class_global_list_val = orginal_class_global_list_test.type(torch.cuda.LongTensor)
-                        coord_pred_global_list_test = coord_pred_global_list_test.type(torch.cuda.LongTensor)
-                        coord_inp_global_list_test = coord_inp_global_list_test.type(torch.cuda.LongTensor)
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.to(device)
-                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.to(device)
-                        class_scores_global_list_test = class_scores_global_list_test.to(device)
-                        orginal_class_global_list_test = orginal_class_global_list_test.to(device)
-                        coord_pred_global_list_test = coord_pred_global_list_test.to(device)
-                        coord_inp_global_list_test = coord_inp_global_list_test.to(device)
+                    if train_on_gpu:
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.FloatTensor)
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.type(torch.FloatTensor)
+                        class_scores_global_list_test = class_scores_global_list_test.type(torch.FloatTensor)
+                        orginal_class_global_list_val = orginal_class_global_list_test.type(torch.FloatTensor)
+                        coord_pred_global_list_test = coord_pred_global_list_test.type(torch.FloatTensor)
+                        coord_inp_global_list_test = coord_inp_global_list_test.type(torch.FloatTensor)
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
+                        pc_inp_tnsr_global_list_test = pc_inp_tnsr_global_list_test.cuda()
+                        class_scores_global_list_test = class_scores_global_list_test.cuda()
+                        orginal_class_global_list_test = orginal_class_global_list_test.cuda()
+                        coord_pred_global_list_test = coord_pred_global_list_test.cuda()
+                        coord_inp_global_list_test = coord_inp_global_list_test.cuda()
                         pass
 
                     loss_pc = criterion_coord(pc_pred_global_list_test, pc_inp_tnsr_global_list_test)
