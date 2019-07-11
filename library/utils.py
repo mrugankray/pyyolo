@@ -151,7 +151,7 @@ def find_grid_coord(xcenter, ycenter, x_min, x_max , y_min , y_max ):
     w, h = x_max - x_min, y_max - y_min
     w_wrt_grid, h_wrt_grid = w/16, h/16
     #print(xcoord_wrt_grid, ycoord_wrt_grid, w_wrt_grid, h_wrt_grid)
-    anchor1_w,anchor1_h = (w_wrt_grid*0.5), (h_wrt_grid*1.5)
+    anchor1_w,anchor1_h = (w_wrt_grid*0.8), (h_wrt_grid*1.2)
     anchor2_w,anchor2_h = (w_wrt_grid*1.2), (h_wrt_grid*0.8)
     convert_list = np.array([xcoord_wrt_grid, ycoord_wrt_grid, w_wrt_grid, h_wrt_grid, anchor1_w, anchor1_h, anchor2_w, anchor2_h])
     return(convert_list)
@@ -264,7 +264,7 @@ class give_value(object):
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
             else:
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
-
+        print(iou_anchor1, iou_anchor2)
         #print('input_vector', input_vector)
         #print('grid_coord_wrt_grid[0]', grid_coord_wrt_grid[0])
         output_tnsr = output_tensor(xcenter = xcenter, ycenter = ycenter, input_array = input_vector)
