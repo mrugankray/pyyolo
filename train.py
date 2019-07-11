@@ -202,8 +202,8 @@ def train(epochs):
         for trn_i, trn_sample in enumerate(train_loader):
             trn_img = trn_sample['image']
             output_tnsr = trn_sample['coord']
-            grid_locate_x = trn_sample['grid_locate_x'] - 1
-            grid_locate_y = trn_sample['grid_locate_y'] - 1
+            grid_locate_x = trn_sample['grid_locate_x']
+            grid_locate_y = trn_sample['grid_locate_y']
             print('output_tnsr_val shape',output_tnsr.shape)    
             print('image shape', trn_img.shape)      
 
@@ -428,8 +428,8 @@ def train(epochs):
 
                     val_img = val_sample['image']
                     output_tnsr_val = val_sample['coord']
-                    grid_locate_x_val = val_sample['grid_locate_x'] - 1
-                    grid_locate_y_val = val_sample['grid_locate_y'] - 1
+                    grid_locate_x_val = val_sample['grid_locate_x']
+                    grid_locate_y_val = val_sample['grid_locate_y']
                     #print('output_tnsr_val',output_tnsr_val)          
 
                     if train_on_gpu:
@@ -575,8 +575,8 @@ def train(epochs):
                 for test_i, test_sample in enumerate(test_loader):
                     test_img = test_sample['image']
                     output_tnsr_test = test_sample['coord']
-                    grid_locate_x_test = test_sample['grid_locate_x'] - 1
-                    grid_locate_y_test = test_sample['grid_locate_y'] - 1
+                    grid_locate_x_test = test_sample['grid_locate_x']
+                    grid_locate_y_test = test_sample['grid_locate_y']
                     #print('output_tnsr_test',output_tnsr_test)          
 
                     if train_on_gpu:
