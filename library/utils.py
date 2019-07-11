@@ -264,7 +264,7 @@ class give_value(object):
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
             else:
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
-        print(iou_anchor1, iou_anchor2)
+        #print(iou_anchor1, iou_anchor2)
         #print('input_vector', input_vector)
         #print('grid_coord_wrt_grid[0]', grid_coord_wrt_grid[0])
         output_tnsr = output_tensor(xcenter = xcenter, ycenter = ycenter, input_array = input_vector)
