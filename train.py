@@ -177,7 +177,7 @@ criterion_coord = nn.SmoothL1Loss(size_average=None, reduce=None, reduction='mea
 criterion_img = nn.CrossEntropyLoss()
 
 #Optimizer#
-optimizer = optim.Adam(model.parameters(), lr=0.003)
+optimizer = optim.Adam(model.parameters(), lr=0.1)
 
 if train_on_gpu:
     model = model.cuda()
