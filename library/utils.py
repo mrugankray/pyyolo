@@ -31,6 +31,7 @@ def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for developm
 
 def readCoord(path = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts/dog-1.txt'):
     with open(path, 'r') as f:
+        #print(path)
         lines = f.readlines()
         lines = re.split(r'\s', lines[1])
         lines = list(map(int, lines))
@@ -302,7 +303,7 @@ class yoloDataset(Dataset):
             #print('1st',tempName.find('jpg'))
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
         elif tempName.find('jpeg') >= 0:
-            print('2nd',tempName.find('jpg'))
+            #print('2nd',tempName.find('jpeg'))
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpeg','.txt')))
         elif tempName.find('png') >= 0:
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.png','.txt')))
@@ -439,11 +440,11 @@ class ToTensor(object):
         return {'image': image, 'coord': coord, 'img_name': sample['img_name'],'grid_locate_x':sample['grid_locate_x'],'grid_locate_y':sample['grid_locate_y']}
 
 ##testing##
-dataTransform = transforms.Compose([Rescale(200),RandomCrop(190),give_value(), Normalize(), ToTensor()])
+'''dataTransform = transforms.Compose([Rescale(200),RandomCrop(190),give_value(), Normalize(), ToTensor()])
 dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/img',
 rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/txt',transform=dataTransform)
 
-num_of_pics = 1
+num_of_pics = 1'''
 
 '''for i in range(0, num_of_pics):
     idx = np.random.randint(0, len(dataset))
