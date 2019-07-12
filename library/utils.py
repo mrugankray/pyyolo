@@ -300,8 +300,8 @@ class yoloDataset(Dataset):
         #print(imgName)
         frame = mpimg.imread(imgName,0)
         #print(frame)
-        if img.shape[2] == 4:
-            img = img[:,:,0:3]
+        if frame.shape[2] == 4:
+            frame = frame[:,:,0:3]
         if tempName.find('.jpg') >= 0:
             #print('1st',tempName.find('jpg'))
             coord = readCoord(path_inp = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
