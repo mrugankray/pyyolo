@@ -15,13 +15,14 @@ def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for developm
     #img_dog_name_arr = []
     #print(txt_dog_name_arr[i])
     if img == None:
-        frame = cv2.imread(img_file)
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        frame = mpimg.imread(img_file)
     else:
         frame = img
     #frame = cv2.resize(frame, (300,300), interpolation = cv2.INTER_AREA)
     '''plt.imshow(frame,cmap='gray')
     plt.show()'''
+    if img.shape[2] == 4:
+        img = img[:,:,0:3]
     return frame
     #print(frame.shape)
     '''cv2.imshow('dog', frame)
@@ -357,9 +358,10 @@ class yoloDataset(Dataset):
 class Normalize(object):
     def __call__(self, sample):
         image, coord = sample['image'], sample['coord']
-        image = image/255
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        image = image/255.0
         for i in range(0,14):           
-            coord[i] = (coord[i] - 100)/50
+            coord[i] = (coord[i] - 100)/50.0
         #print('Normalize', sample['coord'])
         return {'image': image, 'coord': coord, 'img_name': sample['img_name'], 'grid_locate_x':sample['grid_locate_x'],'grid_locate_y':sample['grid_locate_y']}
 
