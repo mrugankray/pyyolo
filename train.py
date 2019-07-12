@@ -18,11 +18,11 @@ data_transform = transforms.Compose([Rescale(240),RandomCrop(224),give_value(), 
 '''
 
 ##Loading Dataset##
-transformed_train_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/images/mixed',
-rootDirCoord = '/content/pyyolo/dataset/texts/mixed',transform=data_transform)
+transformed_train_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset_colab/images/mixed',
+rootDirCoord = '/content/pyyolo/dataset_colab/texts/mixed',transform=data_transform)
 
-transformed_test_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset/test/img',
-rootDirCoord = '/content/pyyolo/dataset/test/txt',transform=data_transform)
+transformed_test_dataset = yoloDataset(rootDirImg = '/content/pyyolo/dataset_colab/test/img',
+rootDirCoord = '/content/pyyolo/dataset_colab/test/txt',transform=data_transform)
 
 #print(len(transformed_train_dataset))
 
