@@ -440,13 +440,13 @@ class ToTensor(object):
         return {'image': image, 'coord': coord, 'img_name': sample['img_name'],'grid_locate_x':sample['grid_locate_x'],'grid_locate_y':sample['grid_locate_y']}
 
 ##testing##
-dataTransform = transforms.Compose([Rescale(200),RandomCrop(190),give_value(), Normalize(), ToTensor()])
+'''dataTransform = transforms.Compose([Rescale(200),RandomCrop(190),give_value(), Normalize(), ToTensor()])
 dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/img',
 rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/txt',transform=dataTransform)
 
-num_of_pics = 1
+num_of_pics = 1'''
 
-for i in range(0, num_of_pics):
+'''for i in range(0, num_of_pics):
     idx = np.random.randint(0, len(dataset))
     #idx = 0
     sample = dataset[idx]
@@ -454,6 +454,6 @@ for i in range(0, num_of_pics):
     #print('img name:',sample['img_name'])
     print("sample['grid_locate_x']", sample['grid_locate_x'])
     print('tensor:', sample['coord'][sample['grid_locate_y']][sample['grid_locate_x']])
-    '''showCenter(img = sample['image'], xmin = sample['coord'][0],xmax = sample['coord'][1],ymin = sample['coord'][2],ymax = sample['coord'][3])'''
+    showCenter(img = sample['image'], xmin = sample['coord'][0],xmax = sample['coord'][1],ymin = sample['coord'][2],ymax = sample['coord'][3])'''
 
 '''showCenter(Imgpath = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/dogs_imgs/dog-27.jpg',TxtrootDirCoordPath = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts/dog-27.txt')'''
