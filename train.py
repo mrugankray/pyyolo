@@ -187,9 +187,9 @@ if train_on_gpu:
 trn_loss_list = []
 val_loss_list = []
 test_loss_list = []
-val_min_loss = np.Inf
 
 def train(epochs):
+    val_min_loss = np.Inf
     for epoch in range(epochs):
         trn_loss = 0
         test_loss = 0
