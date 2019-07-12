@@ -7,6 +7,7 @@ import os
 import numpy as np
 import re
 from torchvision import transforms
+import matplotlib.image as mpimg
 
 def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts/dog-1.txt', img_file = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/dogs_imgs/dog-1.jpg'):
     #txt_dog_name_arr = os.listdir(txt_dog_fold)
@@ -14,7 +15,8 @@ def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for developm
     #img_dog_name_arr = []
     #print(txt_dog_name_arr[i])
     if img == None:
-        frame = cv2.imread(img_file,0)
+        frame = cv2.imread(img_file)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     else:
         frame = img
     #frame = cv2.resize(frame, (300,300), interpolation = cv2.INTER_AREA)
