@@ -301,12 +301,12 @@ class yoloDataset(Dataset):
         #print(frame)
         if tempName.find('.jpg') >= 0:
             #print('1st',tempName.find('jpg'))
-            coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
+            coord = readCoord(path_inp = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
         elif tempName.find('.jpeg') >= 0:
             #print('2nd',tempName.find('jpeg'))
-            coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpeg','.txt')))
+            coord = readCoord(path_inp = os.path.join(self.rootDirCoord, tempName.replace('.jpeg','.txt')))
         elif tempName.find('.png') >= 0:
-            coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.png','.txt')))
+            coord = readCoord(path_inp = os.path.join(self.rootDirCoord, tempName.replace('.png','.txt')))
         #print(tempName)
         #print(coord)
 
