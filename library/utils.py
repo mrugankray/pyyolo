@@ -31,7 +31,7 @@ def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for developm
 
 def readCoord(path_inp):
     with open(path_inp, 'r') as f:
-        print(path)
+        print(path_inp)
         lines = f.readlines()
         lines = re.split(r'\s', lines[1])
         lines = list(map(int, lines))
