@@ -216,9 +216,9 @@ def train(epochs):
             optimizer.zero_grad()
 
             pred_tnsr = model(trn_img)
-            print('output_tnsr shape',output_tnsr.shape)    
+            '''print('output_tnsr shape',output_tnsr.shape)    
             print('image shape', trn_img.shape)
-            print('pred tensor shape', pred_tnsr.shape)
+            print('pred tensor shape', pred_tnsr.shape)'''
 
             #comuting losses
             '''if iou_anchor1 > iou_anchor2:
@@ -278,7 +278,7 @@ def train(epochs):
                 #print(compare_var)
 
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
-                    print(True)
+                    #print(True)
 
                     class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][2]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
@@ -313,8 +313,8 @@ def train(epochs):
                     continue
 
                 else:
-                    print(False)
-                    print(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
+                    #print(False)
+                    #print(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
                     class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][8], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
                     class_scores_list = np.squeeze(class_scores_list)
@@ -416,7 +416,7 @@ def train(epochs):
             # optimizer
             optimizer.step()
 
-            trn_running_loss += total_loss.item() * batch_size
+            trn_running_loss += total_loss.item() * len(trn_img)
 
         else:
             with torch.no_grad():
@@ -425,7 +425,7 @@ def train(epochs):
                 model.eval()
 
                 for val_img, val_sample in enumerate(val_loader):
-                    print(len(val_sample))
+                    #print(len(val_sample))
                     val_img = val_sample['image']
                     output_tnsr_val = val_sample['coord']
                     grid_locate_x_val = val_sample['grid_locate_x']
@@ -440,9 +440,9 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(val_img)
-                    print('output_tnsr shape val',output_tnsr_val.shape)    
+                    '''print('output_tnsr shape val',output_tnsr_val.shape)    
                     print('image shape val', val_img.shape)
-                    print('pred tensor shape val', pred_tnsr.shape)
+                    print('pred tensor shape val', pred_tnsr.shape)'''
 
                     #comuting losses
                     loss_pc = 0
@@ -573,7 +573,7 @@ def train(epochs):
 
                     total_loss_val = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
 
-                    val_running_loss += total_loss_val.item() * batch_size
+                    val_running_loss += total_loss_val.item() * len(val_img)
 
                 for test_i, test_sample in enumerate(test_loader):
                     test_img = test_sample['image']
@@ -590,9 +590,9 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(test_img)
-                    print('output_tnsr shape test',output_tnsr_test.shape)    
+                    '''print('output_tnsr shape test',output_tnsr_test.shape)    
                     print('image shape test', test_img.shape)
-                    print('pred tensor shape test', pred_tnsr.shape)
+                    print('pred tensor shape test', pred_tnsr.shape)'''
 
                     #comuting losses
                     loss_pc = 0
@@ -723,7 +723,7 @@ def train(epochs):
 
                     total_loss_test = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
 
-                    test_running_loss += total_loss_test.item() * batch_size
+                    test_running_loss += total_loss_test.item() * len(test_img)
 
             trn_loss = trn_running_loss/len(train_loader.dataset)
             val_loss = val_running_loss/len(val_loader.dataset)
@@ -742,7 +742,7 @@ def train(epochs):
                 torch.save(model.state_dict(), 'model.pth')
                 val_min_loss = val_loss
 
-train(1)
+train(50)
 '''x = 0
 for trn_i, trn_sample in enumerate(train_loader):
     x = x+1
