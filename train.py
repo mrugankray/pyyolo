@@ -177,7 +177,7 @@ criterion_coord = nn.SmoothL1Loss(size_average=None, reduce=None, reduction='mea
 criterion_img = nn.CrossEntropyLoss()
 
 #Optimizer#
-optimizer = optim.SGD(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.003)
 
 if train_on_gpu:
     model = model.cuda()
@@ -408,7 +408,7 @@ def train(epochs):
             loss_class = loss_class / batch_size
             loss_bounding_coord = loss_bounding_coord / batch_size'''
 
-            total_loss = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
+            total_loss = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
             # back propagation
             total_loss.backward()
@@ -571,7 +571,7 @@ def train(epochs):
                     loss_class = loss_class / batch_size
                     loss_bounding_coord = loss_bounding_coord / batch_size'''
 
-                    total_loss_val = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
+                    total_loss_val = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
                     val_running_loss += total_loss_val.item() * len(val_img)
 
@@ -721,7 +721,7 @@ def train(epochs):
                     loss_class = loss_class / batch_size
                     loss_bounding_coord = loss_bounding_coord / batch_size'''
 
-                    total_loss_test = 0.33*loss_pc + 0.33*loss_class + 0.33*loss_bounding_coord
+                    total_loss_test = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
                     test_running_loss += total_loss_test.item() * len(test_img)
 
