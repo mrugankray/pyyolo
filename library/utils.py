@@ -297,7 +297,16 @@ class yoloDataset(Dataset):
         #print(imgName)
         frame = cv2.imread(imgName,0)
         #print(frame)
-        coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
+        coord = readCoord(path = os.path.join(self.rootDirCoord, if tempName.find('jpg') {
+            tempName.replace('.jpg','.txt')
+        }   
+        elif tempName.find('jpeg'):
+            tempName.replace('.jpeg','.txt')
+        }   
+        elif tempName.find('png'):
+            tempName.replace('.png','.txt')
+        }   
+        ))
         #print(coord)
 
         sample = {'image': frame, 'coord': coord, 'img_name': tempName,'grid_locate_x':0,'grid_locate_y':0}

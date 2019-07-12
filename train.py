@@ -29,7 +29,7 @@ rootDirCoord = '/content/pyyolo/dataset/test/txt',transform=data_transform)
 len_dataset = len(transformed_train_dataset)
 indices = list(range(len_dataset))
 np.random.shuffle(indices)
-split = int(np.floor(0.2*len_dataset))
+split = int(np.floor(0.103*len_dataset))
 train_idx = indices[split:]
 val_idx = indices[:split]
 
@@ -203,9 +203,7 @@ def train(epochs):
             trn_img = trn_sample['image']
             output_tnsr = trn_sample['coord']
             grid_locate_x = trn_sample['grid_locate_x']
-            grid_locate_y = trn_sample['grid_locate_y']
-            print('output_tnsr_val shape',output_tnsr.shape)    
-            print('image shape', trn_img.shape)      
+            grid_locate_y = trn_sample['grid_locate_y']      
 
             if train_on_gpu:
                 trn_img = trn_img.type(torch.cuda.FloatTensor)
@@ -218,6 +216,8 @@ def train(epochs):
             optimizer.zero_grad()
 
             pred_tnsr = model(trn_img)
+            print('output_tnsr shape',output_tnsr.shape)    
+            print('image shape', trn_img.shape)
             print('pred tensor shape', pred_tnsr.shape)
 
             #comuting losses
@@ -254,7 +254,7 @@ def train(epochs):
             #print('grid_locate_y', type(grid_locate_y))
             #print('pred_tnsr',type(pred_tnsr))
             #print('pred_tnsr[0][0]', pred_tnsr[0][0])
-            for i in range(0,8):
+            for i in range(0,len(trn_img)):
                 '''print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
                 print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
                 print('[output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])'''
@@ -350,8 +350,8 @@ def train(epochs):
             coord_inp_global_list = np.array(coord_inp_global_list)
 
             #reshaping numpy array
-            pc_pred_global_list = np.reshape(pc_pred_global_list,(batch_size, 1)) #size becomes 8,1
-            pc_inp_tnsr_global_list = np.reshape(pc_inp_tnsr_global_list,(batch_size, 1))
+            pc_pred_global_list = np.reshape(pc_pred_global_list,(len(trn_img), 1)) #size becomes 8,1
+            pc_inp_tnsr_global_list = np.reshape(pc_inp_tnsr_global_list,(len(trn_img), 1))
 
             #converting numpy array to tensors
             pc_pred_global_list = torch.from_numpy(pc_pred_global_list)
@@ -364,12 +364,12 @@ def train(epochs):
             coord_pred_global_list.requires_grad_(True)
             coord_inp_global_list = torch.from_numpy(coord_inp_global_list)
 
-            print(type(pc_pred_global_list))
+            '''print(type(pc_pred_global_list))
             print(type(pc_inp_tnsr_global_list))
             print(type(class_scores_global_list))
             print(type(orginal_class_global_list))
             print(type(coord_pred_global_list))
-            print(type(coord_inp_global_list))
+            print(type(coord_inp_global_list))'''
             
             '''print(pc_pred_global_list.shape)
             print(pc_inp_tnsr_global_list.shape)
@@ -393,12 +393,12 @@ def train(epochs):
                 coord_inp_global_list = coord_inp_global_list.cuda()
                 pass
 
-            print('pc_pred_global_list',pc_pred_global_list)
+            '''print('pc_pred_global_list',pc_pred_global_list)
             print('pc_inp_tnsr_global_list',pc_inp_tnsr_global_list)
             print('class_scores_global_list',class_scores_global_list)
             print('orginal_class_global_list',orginal_class_global_list)
             print('coord_pred_global_list',coord_pred_global_list)
-            print('coord_inp_global_list',coord_inp_global_list)
+            print('coord_inp_global_list',coord_inp_global_list)'''
 
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
             loss_class = criterion_img(class_scores_global_list, orginal_class_global_list)
@@ -425,7 +425,7 @@ def train(epochs):
                 model.eval()
 
                 for val_img, val_sample in enumerate(val_loader):
-
+                    print(len(val_sample))
                     val_img = val_sample['image']
                     output_tnsr_val = val_sample['coord']
                     grid_locate_x_val = val_sample['grid_locate_x']
@@ -440,6 +440,9 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(val_img)
+                    print('output_tnsr shape val',output_tnsr_val.shape)    
+                    print('image shape val', val_img.shape)
+                    print('pred tensor shape val', pred_tnsr.shape)
 
                     #comuting losses
                     loss_pc = 0
@@ -455,7 +458,7 @@ def train(epochs):
                     grid_locate_x_val = grid_locate_x_val.detach().numpy()
                     grid_locate_y_val = grid_locate_y_val.detach().numpy()
                     output_tnsr_val = output_tnsr_val.detach().numpy()
-                    for i in range(0,8):
+                    for i in range(0,len(val_img)):
                         if output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0] > -2:
 
                             class_scores_list_val = np.array([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][1], pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][2]])
@@ -522,7 +525,7 @@ def train(epochs):
 
                     #orginal_class_global_list_val = list(map(int, orginal_class_global_list_val*50 + 100))
                     # converting lists to numpy array
-                    for i in range(0,len(orginal_class_global_list)):
+                    for i in range(0,len(orginal_class_global_list_val)):
                         orginal_class_global_list_val[i] = orginal_class_global_list_val[i]*50+100
                         orginal_class_global_list_val[i] = int(orginal_class_global_list_val[i])
                     pc_pred_global_list_val = np.array(pc_pred_global_list_val)
@@ -533,8 +536,8 @@ def train(epochs):
                     coord_inp_global_list_val = np.array(coord_inp_global_list_val)
 
                     #reshaping numpy array
-                    pc_pred_global_list_val = np.reshape(pc_pred_global_list_val,(batch_size, 1))
-                    pc_inp_tnsr_global_list_val = np.reshape(pc_inp_tnsr_global_list_val,(batch_size, 1))
+                    pc_pred_global_list_val = np.reshape(pc_pred_global_list_val,(len(val_img), 1))
+                    pc_inp_tnsr_global_list_val = np.reshape(pc_inp_tnsr_global_list_val,(len(val_img), 1))
 
                     #converting numpy array to tensors
                     pc_pred_global_list_val = torch.from_numpy(pc_pred_global_list_val)
@@ -587,6 +590,9 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(test_img)
+                    print('output_tnsr shape test',output_tnsr_test.shape)    
+                    print('image shape test', test_img.shape)
+                    print('pred tensor shape test', pred_tnsr.shape)
 
                     #comuting losses
                     loss_pc = 0
@@ -602,7 +608,7 @@ def train(epochs):
                     grid_locate_x_test = grid_locate_x_test.detach().numpy()
                     grid_locate_y_test = grid_locate_y_test.detach().numpy()
                     output_tnsr_test = output_tnsr_test.detach().numpy()
-                    for i in range(0,8):
+                    for i in range(0,len(test_img)):
                         if output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0] > -2:
 
                             class_scores_list_test = np.array([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][1], pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][2]])
@@ -681,8 +687,8 @@ def train(epochs):
                     coord_inp_global_list_test = np.array(coord_inp_global_list_test)
 
                     #reshaping numpy array
-                    pc_pred_global_list_test = np.reshape(pc_pred_global_list_test,(batch_size, 1))
-                    pc_inp_tnsr_global_list_test = np.reshape(pc_inp_tnsr_global_list_test,(batch_size, 1))
+                    pc_pred_global_list_test = np.reshape(pc_pred_global_list_test,(len(test_img), 1))
+                    pc_inp_tnsr_global_list_test = np.reshape(pc_inp_tnsr_global_list_test,(len(test_img), 1))
 
                     #converting numpy array to tensors
                     pc_pred_global_list_test = torch.from_numpy(pc_pred_global_list_test)
