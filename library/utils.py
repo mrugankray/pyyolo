@@ -294,15 +294,19 @@ class yoloDataset(Dataset):
     def __getitem__(self, idx):
         tempName = os.listdir(self.rootDirImg)[idx]
         imgName = os.path.join(self.rootDirImg, tempName)
+        #print(tempName)
         #print(imgName)
         frame = cv2.imread(imgName,0)
         #print(frame)
-        if tempName.find('jpg'):
+        if tempName.find('jpg') >= 0:
+            #print('1st',tempName.find('jpg'))
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
-        elif tempName.find('jpeg'):
+        elif tempName.find('jpeg') >= 0:
+            print('2nd',tempName.find('jpg'))
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.jpeg','.txt')))
-        elif tempName.find('png'):
+        elif tempName.find('png') >= 0:
             coord = readCoord(path = os.path.join(self.rootDirCoord, tempName.replace('.png','.txt')))
+        #print(tempName)
         #print(coord)
 
         sample = {'image': frame, 'coord': coord, 'img_name': tempName,'grid_locate_x':0,'grid_locate_y':0}
@@ -436,8 +440,8 @@ class ToTensor(object):
 
 ##testing##
 dataTransform = transforms.Compose([Rescale(200),RandomCrop(190),give_value(), Normalize(), ToTensor()])
-dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/images/dogs_imgs',
-rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/dataset/texts/dogs_txts',transform=dataTransform)
+dataset = yoloDataset(rootDirImg = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/img',
+rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/python/computer_vision/part_1_mod_1_lsn_2/yolo/github/dataset/test/txt',transform=dataTransform)
 
 num_of_pics = 1
 
