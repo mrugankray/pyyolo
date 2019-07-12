@@ -15,14 +15,12 @@ def load_img(img = None,txt_file = '/media/mrugank/626CB0316CB00239/for developm
     #img_dog_name_arr = []
     #print(txt_dog_name_arr[i])
     if img == None:
-        frame = mpimg.imread(img_file)
+        frame = cv2.imread(img_file)
     else:
         frame = img
     #frame = cv2.resize(frame, (300,300), interpolation = cv2.INTER_AREA)
     '''plt.imshow(frame,cmap='gray')
     plt.show()'''
-    if img.shape[2] == 4:
-        img = img[:,:,0:3]
     return frame
     #print(frame.shape)
     '''cv2.imshow('dog', frame)
@@ -300,8 +298,10 @@ class yoloDataset(Dataset):
         imgName = os.path.join(self.rootDirImg, tempName)
         #print(tempName)
         #print(imgName)
-        frame = cv2.imread(imgName,0)
+        frame = mpimg.imread(imgName,0)
         #print(frame)
+        if img.shape[2] == 4:
+            img = img[:,:,0:3]
         if tempName.find('.jpg') >= 0:
             #print('1st',tempName.find('jpg'))
             coord = readCoord(path_inp = os.path.join(self.rootDirCoord, tempName.replace('.jpg','.txt')))
