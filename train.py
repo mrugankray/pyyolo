@@ -10,13 +10,6 @@ from collections import OrderedDict
 
 data_transform = transforms.Compose([Rescale(240),RandomCrop(224),give_value(), Normalize(), ToTensor()])
 
-'''
-/content/pyyolo/dataset/images/mixed
-/content/pyyolo/dataset/texts/mixed
-/content/pyyolo/dataset/test/img
-/content/pyyolo/dataset/test/txt
-'''
-
 ##Loading Dataset##
 transformed_train_dataset = yoloDataset(rootDirImg = '/content/dataset_colab/images/mixed',
 rootDirCoord = '/content/dataset_colab/texts/mixed',transform=data_transform)
@@ -102,71 +95,6 @@ class Net(nn.Module):
 
         return x
 
-        '''
-        (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (1): ReLU(inplace)
-    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (3): ReLU(inplace)
-    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (6): ReLU(inplace)
-    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1,1))
-    (8): ReLU(inplace)
-    (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (11): ReLU(inplace)
-    (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (13): ReLU(inplace)
-    (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (15): ReLU(inplace)
-    (16): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (17): ReLU(inplace)
-    (18): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (19): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (20): ReLU(inplace)
-    (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (22): ReLU(inplace)
-    (23): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (24): ReLU(inplace)
-    (25): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (26): ReLU(inplace)
-    (27): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
-    (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (29): ReLU(inplace)
-    (30): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (31): ReLU(inplace)
-    (32): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (33): ReLU(inplace)
-    (34): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (35): ReLU(inplace)
-    (36): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-  )
-  (classifier): Sequential(
-    (37): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (38): ReLU()
-    (39): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1,1))
-    (40): ReLU()
-    (41): Conv2d(64, 14, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-        '''
-
-'''model = models.vgg19(pretrained = False)
-model.features[0] = nn.Conv2d(1, 64, 3, stride=(1,1), padding=(1,1))
-model.features[36] = nn.Conv2d(512, 512, 3, stride=(1,1), padding=(1,1))
-
-classifier = nn.Sequential(OrderedDict([
-    ('37', nn.Conv2d(512, 256, 3, stride=1, padding=1)),
-    ('38', nn.ReLU()),
-    ('39', nn.Conv2d(256,64, 3, stride=1, padding=1)),
-    ('40', nn.ReLU()),
-    ('41', nn.Conv2d(64, 14, 3, stride=1, padding=1))
-]))
-
-model.classifier = classifier'''
-
-'''model.fc = nn.Sequential(OrderedDict([
-    ('fc1', nn.Conv2d())
-]))'''
-
 #print(model)
 model = Net()
 model = model.float()
@@ -207,33 +135,13 @@ def train(epochs):
 
             if train_on_gpu:
                 trn_img = trn_img.type(torch.cuda.FloatTensor)
-                #output_tnsr = output_tnsr.type(torch.cuda.FloatTensor)
                 trn_img = trn_img.cuda()
-                #output_tnsr = output_tnsr.cuda()
                 pass
 
             #optizer to 0 grad
             optimizer.zero_grad()
 
             pred_tnsr = model(trn_img)
-            '''print('output_tnsr shape',output_tnsr.shape)    
-            print('image shape', trn_img.shape)
-            print('pred tensor shape', pred_tnsr.shape)'''
-
-            #comuting losses
-            '''if iou_anchor1 > iou_anchor2:
-                loss_pc = criterion_coord(pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][0])
-
-                loss_class = criterion_img(pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][1], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][1])
-
-                loss_bounding_coord = criterion_coord([pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][3], [grid_locate_y[i]][grid_locate_x[i]][4], [grid_locate_y[i]][grid_locate_x[i]][5] , [grid_locate_y[i]][grid_locate_x[i]][6]], [output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][3], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][4], output_tns_testr[grid_locate_y[i]][grid_locate_x[i]][5], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][6]])
-
-            elif iou_anchor2 > iou_anchor1:
-                loss_pc = criterion_coord(pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][7], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][7])
-
-                loss_class = criterion_img(pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][9], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][9])
-
-                loss_bounding_coord = criterion_coord([pred_tnsr[grid_locate_y[i]][grid_locate_x[i]][10], [grid_locate_y[i]][grid_locate_x[i]][11], [grid_locate_y[i]][grid_locate_x[i]][12] , [grid_locate_y[i]][grid_locate_x[i]][13]], [output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][10], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][11], output_tns_testr[grid_locate_y[i]][grid_locate_x[i]][12], output_tnsr_val[grid_locate_y[i]][grid_locate_x[i]][13]])'''
 
             loss_pc = 0
             loss_class = 0
@@ -248,37 +156,9 @@ def train(epochs):
             grid_locate_x = grid_locate_x.detach().numpy()
             grid_locate_y = grid_locate_y.detach().numpy()
             output_tnsr = output_tnsr.detach().numpy()
-            #print('output_tnsr[0][0]',output_tnsr[0][0])
-            #print('grid_locate_x', type(grid_locate_x))
-            #print('output_tnsr', type(output_tnsr))
-            #print('grid_locate_y', type(grid_locate_y))
-            #print('pred_tnsr',type(pred_tnsr))
-            #print('pred_tnsr[0][0]', pred_tnsr[0][0])
             for i in range(0,len(trn_img)):
-                '''print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
-                print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
-                print('[output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])'''
-
-                #print('grid_locate_x', grid_locate_x)
-                #print('grid_locate_y', grid_locate_y)
-                #print('grid_locate_x', grid_locate_x[i])
-                #print('grid_locate_y', grid_locate_y[i])
-                #print('[pred_tnsr[1]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
-                #print('grid_locate_y[i]',grid_locate_y[i], 'grid_locate_x[i]', grid_locate_x[i])
-                #print('[pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
-                #print('[output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]]', [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
-
-                #class_scores_list = np.array([pred_tnsr[0][grid_locate_y[0]][grid_locate_x[0]][1].detach().numpy(), pred_tnsr[0][grid_locate_y[0]][grid_locate_x[0]][2].detach().numpy()])
-                #class_scores_list = class_scores_list.numpy()
-                #class_scores_list = np.reshape(class_scores_list, (1,2))
-                #print(class_scores_list.shape)
-                #print(class_scores_list)
-                #compare_var = np.array([output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1]])
-                #print(compare_var.shape)
-                #print(compare_var)
 
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
-                    #print(True)
 
                     class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][2]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
@@ -299,22 +179,10 @@ def train(epochs):
                     
                     coord_inp_global_list.append([output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
                     output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],output_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]])
-                    
-                    #print(class_scores_list)
-                    
-                    '''loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0], output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
-
-                    loss_class += criterion_img(class_scores_list, orginal_class)
-
-                    loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
-                    pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],pred_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]], [output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][3],
-                    output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][4],output_tnsr[i] [grid_locate_y[i]][grid_locate_x[i]][5] , output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][6]])'''
 
                     continue
 
                 else:
-                    #print(False)
-                    #print(output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0])
                     class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][8], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][9]])
                     class_scores_list = np.reshape(class_scores_list, (1,2))
                     class_scores_list = np.squeeze(class_scores_list)
@@ -338,7 +206,6 @@ def train(epochs):
                     continue
 
             # converting lists to numpy array
-            #orginal_class_global_list = list(map(int, orginal_class_global_list*50 + 100))
             for i in range(0,len(orginal_class_global_list)):
                 orginal_class_global_list[i] = orginal_class_global_list[i]*50+100
                 orginal_class_global_list[i] = int(orginal_class_global_list[i])
@@ -364,25 +231,9 @@ def train(epochs):
             coord_pred_global_list.requires_grad_(True)
             coord_inp_global_list = torch.from_numpy(coord_inp_global_list)
 
-            '''print(type(pc_pred_global_list))
-            print(type(pc_inp_tnsr_global_list))
-            print(type(class_scores_global_list))
-            print(type(orginal_class_global_list))
-            print(type(coord_pred_global_list))
-            print(type(coord_inp_global_list))'''
-            
-            '''print(pc_pred_global_list.shape)
-            print(pc_inp_tnsr_global_list.shape)
-            print(class_scores_global_list.shape)
-            print(orginal_class_global_list.shape)
-            print(coord_pred_global_list.shape)
-            print(coord_inp_global_list.shape)'''
-
             if train_on_gpu:
                 pc_pred_global_list = pc_pred_global_list.type(torch.cuda.FloatTensor)
                 pc_inp_tnsr_global_list = pc_inp_tnsr_global_list.type(torch.cuda.FloatTensor)
-                #class_scores_global_list = class_scores_global_list.type(torch.cuda.FloatTensor)
-                #orginal_class_global_list = orginal_class_global_list.type(torch.cuda.FloatTensor)
                 coord_pred_global_list = coord_pred_global_list.type(torch.cuda.FloatTensor)
                 coord_inp_global_list = coord_inp_global_list.type(torch.cuda.FloatTensor)
                 pc_pred_global_list = pc_pred_global_list.cuda()
@@ -393,20 +244,9 @@ def train(epochs):
                 coord_inp_global_list = coord_inp_global_list.cuda()
                 pass
 
-            '''print('pc_pred_global_list',pc_pred_global_list)
-            print('pc_inp_tnsr_global_list',pc_inp_tnsr_global_list)
-            print('class_scores_global_list',class_scores_global_list)
-            print('orginal_class_global_list',orginal_class_global_list)
-            print('coord_pred_global_list',coord_pred_global_list)
-            print('coord_inp_global_list',coord_inp_global_list)'''
-
             loss_pc = criterion_coord(pc_pred_global_list, pc_inp_tnsr_global_list)
             loss_class = criterion_img(class_scores_global_list, orginal_class_global_list)
             loss_bounding_coord = criterion_coord(coord_pred_global_list, coord_inp_global_list)
-
-            '''loss_pc = loss_pc / batch_size
-            loss_class = loss_class / batch_size
-            loss_bounding_coord = loss_bounding_coord / batch_size'''
 
             total_loss = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
@@ -440,9 +280,6 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(val_img)
-                    '''print('output_tnsr shape val',output_tnsr_val.shape)    
-                    print('image shape val', val_img.shape)
-                    print('pred tensor shape val', pred_tnsr.shape)'''
 
                     #comuting losses
                     loss_pc = 0
@@ -481,14 +318,6 @@ def train(epochs):
                             coord_inp_global_list_val.append([output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3],
                             output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6]])
 
-                            '''loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0], output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][0])
-
-                            loss_class += criterion_img(class_scores_list_val, orginal_class_val)
-
-                            loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3],
-                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4],pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5] , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6]], [output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][3],
-                            output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][4],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][5] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][6]])'''
-
                             continue
 
                         else:
@@ -513,17 +342,8 @@ def train(epochs):
                             coord_inp_global_list_val.append([output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10],
                             output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13]])
 
-                            '''loss_pc += criterion_coord(output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][7], pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][7])
-
-                            loss_class += criterion_img(class_scores_list_val, orginal_class_val)
-
-                            loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10],
-                            pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11],pred_tnsr[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12] , pred_tnsr[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13]], [output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][10],
-                            output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][11],output_tnsr_val[i] [grid_locate_y_val[i]][grid_locate_x_val[i]][12] , output_tnsr_val[i][grid_locate_y_val[i]][grid_locate_x_val[i]][13]])'''
-
                             continue
 
-                    #orginal_class_global_list_val = list(map(int, orginal_class_global_list_val*50 + 100))
                     # converting lists to numpy array
                     for i in range(0,len(orginal_class_global_list_val)):
                         orginal_class_global_list_val[i] = orginal_class_global_list_val[i]*50+100
@@ -550,8 +370,6 @@ def train(epochs):
                     if train_on_gpu:
                         pc_pred_global_list_val = pc_pred_global_list_val.type(torch.cuda.FloatTensor)
                         pc_inp_tnsr_global_list_val = pc_inp_tnsr_global_list_val.type(torch.cuda.FloatTensor)
-                        #class_scores_global_list_val = class_scores_global_list_val.type(torch.cuda.FloatTensor)
-                        #orginal_class_global_list_val = orginal_class_global_list_val.type(torch.cuda.FloatTensor)
                         coord_pred_global_list_val = coord_pred_global_list_val.type(torch.cuda.FloatTensor)
                         coord_inp_global_list_val = coord_inp_global_list_val.type(torch.cuda.FloatTensor)
                         pc_pred_global_list_val = pc_pred_global_list_val.cuda()
@@ -566,10 +384,6 @@ def train(epochs):
                     loss_pc = criterion_coord(pc_pred_global_list_val, pc_inp_tnsr_global_list_val)
                     loss_class = criterion_img(class_scores_global_list_val, orginal_class_global_list_val)
                     loss_bounding_coord = criterion_coord(coord_pred_global_list_val, coord_inp_global_list_val)
-
-                    '''loss_pc = loss_pc / batch_size
-                    loss_class = loss_class / batch_size
-                    loss_bounding_coord = loss_bounding_coord / batch_size'''
 
                     total_loss_val = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
@@ -590,9 +404,6 @@ def train(epochs):
                         pass
 
                     pred_tnsr = model(test_img)
-                    '''print('output_tnsr shape test',output_tnsr_test.shape)    
-                    print('image shape test', test_img.shape)
-                    print('pred tensor shape test', pred_tnsr.shape)'''
 
                     #comuting losses
                     loss_pc = 0
@@ -631,15 +442,6 @@ def train(epochs):
                             coord_inp_global_list_test.append([output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3],
                             output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4],output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][5] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6]])
 
-
-                            '''loss_pc += criterion_coord(pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0], output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][0])
-
-                            loss_class += criterion_img(class_scores_list_test, orginal_class_test)
-
-                            loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3],
-                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4],pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][5] , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6]], [output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][3],
-                            output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][4],output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][5] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][6]])'''
-
                             continue
 
                         else:
@@ -663,14 +465,6 @@ def train(epochs):
                             
                             coord_inp_global_list_test.append([output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10],
                             output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][12] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]])
-
-                            '''loss_pc += criterion_coord(output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][7], pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][7])
-
-                            loss_class += criterion_img(class_scores_list_test, orginal_class_test)
-
-                            loss_bounding_coord += criterion_coord([pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10],
-                            pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],pred_tnsr[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][12] , pred_tnsr[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]], [output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][10],
-                            output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][11],output_tnsr_test[i] [grid_locate_y_test[i]][grid_locate_x_test[i]][12] , output_tnsr_test[i][grid_locate_y_test[i]][grid_locate_x_test[i]][13]])'''
 
                             continue
                     
@@ -717,10 +511,6 @@ def train(epochs):
                     loss_class = criterion_img(class_scores_global_list_test, orginal_class_global_list_test)
                     loss_bounding_coord = criterion_coord(coord_pred_global_list_test, coord_inp_global_list_test)
 
-                    '''loss_pc = loss_pc / batch_size
-                    loss_class = loss_class / batch_size
-                    loss_bounding_coord = loss_bounding_coord / batch_size'''
-
                     total_loss_test = 0.50*loss_pc + 0.50*loss_class + 0.50*loss_bounding_coord
 
                     test_running_loss += total_loss_test.item() * len(test_img)
@@ -743,13 +533,3 @@ def train(epochs):
                 val_min_loss = val_loss
 
 train(50)
-'''x = 0
-for trn_i, trn_sample in enumerate(train_loader):
-    x = x+1
-    trn_img = trn_sample['image']
-    output_tnsr_val = trn_sample['coord']
-    img_name = trn_sample['img_name']
-    #print(img_name.shape())
-    print(x)
-    print('trn coord',img_name[0])
-    break'''
