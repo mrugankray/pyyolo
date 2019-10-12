@@ -454,7 +454,7 @@ rootDirCoord = '/media/mrugank/626CB0316CB00239/for development purpose only/pyt
 
 num_of_pics = 1
 
-for i in range(0, num_of_pics):
+'''for i in range(0, num_of_pics):
     idx = np.random.randint(0, len(dataset))
     #idx = 0
     sample = dataset[idx]
@@ -462,11 +462,13 @@ for i in range(0, num_of_pics):
     #print('img name:',sample['img_name'])
     print("sample['grid_locate_x']", sample['grid_locate_x'])
     print('tensor:', sample['coord'][sample['grid_locate_y']][sample['grid_locate_x']])
-    print('img_class',sample['img_class'])
+    print('img_class',sample['img_class'])'''
     '''
-    sample['grid_locate_x'] 6
-    tensor: [-1.98  -1.98  -2.    -1.97  -1.7   -1.887 -1.766 -2.    -2.    -2.
-    -2.    -2.    -2.    -2.   ]
+    sample['grid_locate_x'] 4
+    tensor: [-2.     -2.     -2.     -2.     -2.     -2.     -2.     -1.98   -1.98
+    -2.     -1.69   -1.97   -1.7765 -1.855 ]
+    img_class 1
+
     '''
     #showCenter(img = sample['image'], xmin = sample['coord'][0],xmax = sample['coord'][1],ymin = sample['coord'][2],ymax = sample['coord'][3])
 
