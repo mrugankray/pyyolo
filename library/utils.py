@@ -227,9 +227,9 @@ class give_value(object):
         #print('xmin, xmax, ymin, ymax', xmin, xmax, ymin, ymax)
 
         if img_name.find('person') != -1:
-            img_class = 1
-        else:
             img_class = 0
+        else:
+            img_class = 1
 
         centroid = findCentroid(xmin = xmin ,xmax = xmax, ymin = ymin, ymax = ymax)
 
@@ -256,18 +256,18 @@ class give_value(object):
         #print('iou_anchor1, iou_anchor2', iou_anchor1, iou_anchor2)
 
         if iou_anchor1 > iou_anchor2:
-            if img_class == 1:
+            if img_class == 0:
                 input_vector = [1, 1, 0, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor1_w, anchor1_h, 0, 0, 0, 0, 0, 0, 0]
             else:
                 input_vector = [1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor1_w, anchor1_h, 0, 0, 0, 0, 0, 0, 0]
 
         if iou_anchor2 > iou_anchor1:
-            if img_class == 1:
+            if img_class == 0:
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
             else:
                 input_vector = [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor2_w, anchor2_h]
         if iou_anchor1 == iou_anchor2:
-            if img_class == 1:
+            if img_class == 0:
                 input_vector = [1, 1, 0, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor1_w, anchor1_h, 0, 0, 0, 0, 0, 0, 0]
             else:
                 input_vector = [1, 0, 1, grid_coord_wrt_grid[0], grid_coord_wrt_grid[1], anchor1_w, anchor1_h, 0, 0, 0, 0, 0, 0, 0]
