@@ -158,6 +158,7 @@ def train(epochs):
             output_tnsr = output_tnsr.detach().numpy()
             for i in range(0,len(trn_img)):
 
+                # checking if pc val at 0th index is 1 or not if not then val at 7th index should be 1
                 if output_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][0] > -2:
 
                     class_scores_list = np.array([pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][1], pred_tnsr[i][grid_locate_y[i]][grid_locate_x[i]][2]])
